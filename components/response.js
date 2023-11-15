@@ -1,22 +1,40 @@
-import Image from "next/image"
+import Image from "next/image";
+import { BiCopy, BiCheck } from "react-icons/bi";
+import { useRef, useState } from 'react';
 
-export default () => {
+export default function UserMessage() {
+    const textRef = useRef(null);
+    const [hasCopied, setHasCopied] = useState(false);
+
+    const copy = () => {
+        if (textRef.current) {
+            navigator.clipboard.writeText(textRef.current.textContent).then(() => {
+                setHasCopied(true);
+                setTimeout(() => setHasCopied(false), 5000); // Reset the icon after 5 seconds
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    };
+
     return (
-        <div className="grid grid-cols-12 py-4">
-            
-            <div className="icon col-span-1 bg-indigo-100 mr-auto rounded-full p-2">
-               <Image src="/image/chatbot.png" width={50} height={50} alt="profile" ></Image>
+        <div className="flex items-center justify-between rounded-full w-full">
+            <div className="flex-none bg-indigo-100 rounded-full p-2" style={{ width: '60px', height: '60px' }}>
+                <Image src="/image/chatbot.png" width={50} height={50} alt="profile" />
             </div>
 
-            <div className="answer col-span-11 px-4 flex flex-col justify-center ">
-               <span className="text-q py-4"> what is 115161
-               what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161
-
-               BiNavigation
-                </span>
+            <div className="px-4 flex-grow">
+                <p ref={textRef} className="text-q">
+                    
+                    what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161
+                </p>
             </div>
-            
-            
+
+            <div className="flex-none p-2">
+                <button onClick={copy} className="focus:outline-none">
+                    {hasCopied ? <BiCheck size="1.5em" /> : <BiCopy size="1.5em" />}
+                </button>
+            </div>
         </div>
-    )
+    );
 }

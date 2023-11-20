@@ -1,59 +1,63 @@
-import  Message  from "../models/message.model";
-import  Room  from "../models/room.model";
-import {Configuration, OpenAIApi} from 'openai'
-import ENV from '../config.env'
-
-export async function getChat(req, res) {
-    try {
-
-        const { roomid } = req.query; 
-        if (!roomid) return res.status(400).json({ error: "no room id" })
-        const messages = await Message.find({ room: roomid },{__v:0, room: 0})
-        if (!messages) return res.status(400).json({ error: "no messages found" })
-       
-        return res.status(200).json({sucess :true, data : messages})
-    } catch (error) {
-        return res.status(400).json({ error });
-    }
-}
+import OpenAI from 'openai'; 
+import Message from "../models/message.model";
+import Room from "../models/room.model";
+import ENV from '../config.env'; 
 
 export async function createChat(req, res) {
     try {
+        const { roomid } = req.query;
+        const { question } = req.body;
+        
+        if (!roomid) return res.status(400).json({ error: "no room id" });
+        if (!question) return res.status(400).json({ error: "No question provided" });
 
-        const { roomid } = req.query; 
-        const { question, answer } = req.body; 
-        if (!roomid) return res.status(400).json({ error: "no room id" })
-        if (!question&& !answer) return res.status(400).json({ error: "Cannot get data" })
-        const rooms = await Room.findOne({ _id: roomid })
-        if (!rooms) return res.status(400).json({ error: "no room found" })
-        const config = new Configuration({
-            apikey: ENV.OPENAI_API_KEY
+        const room = await Room.findOne({ _id: roomid });
+        if (!room) return res.status(400).json({ error: "no room found" });
 
-    })
-        const openai = new OpenAIApi(config);
+        
+        const openai = new OpenAI({
+            apiKey: ENV.OPENAI_API_KEY, 
+        });
 
-        const completion = await openai.createCompletion({
-            model : "text-davinci-003",
-            prompt: question,
-            temperature: 0.2,
-            max_tokens: 100,
-            top_p : 1
-            
-        })
+        let completion;
+        try {
+            completion = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo-1106",
+                messages: [{ role: "user", content: question }],
+                temperature: 0.7, 
+                max_tokens: 50,
+            });
+        } catch (error) {
+            console.error("Error in API call:", error);
+            return res.status(500).json({ error: "Failed to get a response from the OpenAI API" });
+        }
+        
+        console.log(completion);
+        
+        if (!completion || !completion.choices || completion.choices.length === 0) {
+            return res.status(500).json({ error: "Invalid response structure from OpenAI API" });
+        }
+        
+        const messageChoice = completion.choices[0]; 
+        if (!messageChoice.message || !messageChoice.message.content) {
+            return res.status(500).json({ error: "Invalid message structure in the response" });
+        }
+        
+        const messageText = messageChoice.message.content;
+        
+        const message = new Message({
+            question: question,
+            answer: messageText, 
+            room: roomid
+        });
 
-       const message = new Message({
-            question : question,
-            answer :completion.data.choices[0].text,
-            room : roomid
-    })
-    //save
-    await message.save();
-    //push
-    rooms.messages.push(message._id);
-    //save in room
-    await rooms.save()
-        return res.status(200).json({sucess :true, data : message})
+        await message.save();
+        room.messages.push(message._id);
+        await room.save();
+
+        return res.status(200).json({ success: true, data: message });
     } catch (error) {
-        return res.status(400).json({ error });
+        console.error("Error in createChat:", error);
+        return res.status(500).json({ error: error.message });
     }
 }

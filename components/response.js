@@ -2,7 +2,7 @@ import Image from "next/image";
 import { BiCopy, BiCheck } from "react-icons/bi";
 import { useRef, useState } from 'react';
 
-export default function UserMessage() {
+export default function UserMessage({ans}) {
     const textRef = useRef(null);
     const [hasCopied, setHasCopied] = useState(false);
 
@@ -25,8 +25,7 @@ export default function UserMessage() {
 
             <div className="px-4 flex-grow">
                 <p ref={textRef} className="text-q">
-                    
-                    what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161what is 115161
+                  {ans}
                 </p>
             </div>
 

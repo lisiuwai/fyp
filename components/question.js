@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export default () => {
+export default ({q}) => {
     return (
         
 
@@ -10,7 +10,7 @@ export default () => {
         </div>
       
         <div className="flex-grow px-4 flex items-center">
-            <span className="text-q break-words">what fsdf
+            <span className="text-q break-words">{q}
                 </span>
             </div>
 

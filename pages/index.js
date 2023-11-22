@@ -7,10 +7,12 @@ import Input from '../components/input'
 import Loading from '../components/loading'
 import { useQuery } from 'react-query'
 import { getAllRooms } from '../lib/request'
+import { useState } from 'react'
 
 export default function Home() {
+  const[roomid,setRoomid] = useState(null)
   const { isLoading, isError, data, error } = useQuery('rooms', getAllRooms)
-
+  
   if (isLoading) {
     return <Loading />;
   }
@@ -22,16 +24,26 @@ export default function Home() {
   if (!data) {
     return <div className="text-center">No message</div>;
   }
- console.log(data)
+   function onRoomClick(roomid){
+      data.filter(room =>{
+          if(room._id === roomid){
+            setRoomid(roomid)
+          }
+      })
+   }
   return (
     <div className='grid grid-cols-6'>
-      <div className='bg-gray-900 col-span-1 aside z-10 text-gray-50'>       
-        <Aside getRooms={data} />
+      <div className='bg-gray-900 col-span-1 aside z-10 text-gray-50'>      
+      {
+        data && <Aside getRooms={data}  handler={onRoomClick} />
+      } 
+       
       </div>
       <div className='bg-gray-800 text-gray-50 col-span-5 min-h-screen h-full mb-40'>
-        <Main>
-          {/* Content here */}
-        </Main>
+        {
+          roomid && <Main roomid={roomid}> </Main>
+        }
+        
         <Input>
           Search
         </Input>

@@ -1,4 +1,3 @@
-
 import connect from "@/database/connect";
 import { getAllRooms,createRoom} from "@/controller/room.controller";
 

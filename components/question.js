@@ -10,7 +10,8 @@ export default ({q}) => {
         </div>
       
         <div className="flex-grow px-4 flex items-center">
-            <span className="text-q break-words">{q}
+            <span className="text-q break-words">
+                {q}
                 </span>
             </div>
 

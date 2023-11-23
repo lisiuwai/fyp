@@ -3,6 +3,21 @@ import Message from "../models/message.model";
 import Room from "../models/room.model";
 import ENV from '../config.env'; 
 
+export async function getChat(req, res) {
+    try {
+        const { roomid } = req.query;
+        if (!roomid) return res.status(400).json({ error: "no room id" });
+
+        const room = await Room.findById(roomid).populate('messages');
+        if (!room) return res.status(404).json({ error: "Room not found" });
+
+        return res.status(200).json({ success: true, data: room.messages });
+    } catch (error) {
+        console.error("Error in getChat:", error);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 export async function createChat(req, res) {
     try {
         const { roomid } = req.query;

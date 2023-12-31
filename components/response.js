@@ -2,20 +2,20 @@ import Image from "next/image";
 import { BiCopy, BiCheck } from "react-icons/bi";
 import { useRef, useState } from 'react';
 
-export default ({ans}) => {
-   /*  const textRef = useRef(null);
+export default ({ ans }) => {
+    const textRef = useRef(null);
     const [hasCopied, setHasCopied] = useState(false);
 
     const copy = () => {
         if (textRef.current) {
             navigator.clipboard.writeText(textRef.current.textContent).then(() => {
                 setHasCopied(true);
-                setTimeout(() => setHasCopied(false), 5000); // Reset the icon after 5 seconds
+                setTimeout(() => setHasCopied(false), 3000); 
             }).catch(err => {
                 console.error('Could not copy text: ', err);
             });
         }
-    }; */
+    };
 
     return (
         <div className="flex items-center justify-between rounded-full w-full">
@@ -24,16 +24,16 @@ export default ({ans}) => {
             </div>
 
             <div className="px-4 flex-grow">
-                <p className="text-q">
-            {ans}
+                <p ref={textRef} className="text-q">
+                    {ans}
                 </p>
             </div>
 
-       {/*    /*   <div className="flex-none p-2">
+            <div className="flex-none p-2">
                 <button onClick={copy} className="focus:outline-none">
                     {hasCopied ? <BiCheck size="1.5em" /> : <BiCopy size="1.5em" />}
                 </button>
-            </div> */ }
+            </div>
         </div>
-    )
+    );
 }

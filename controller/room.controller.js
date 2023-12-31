@@ -52,3 +52,14 @@ export async function deleteRoom(req, res) {
     }
 }
 
+export async function updateRoom(req, res) {
+    try {
+        const { id } = req.query;
+        const { name } = req.body; 
+        const updatedRoom = await Room.findByIdAndUpdate(id, { name }, { new: true });
+        return res.status(200).json({ success: true, data: updatedRoom });
+    } catch (error) {
+        return res.status(400).json({ error });
+    }
+}
+

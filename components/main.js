@@ -6,14 +6,14 @@ import Loading from "./loading";
 import NoHistory from './nohistory'
 
 
-export default ({roomid, darkTheme}) => {
+export default ({roomid, darkTheme, isSidebarVisible}) => {
     const {isLoading, isError, data : messages, error} = useQuery(['messages', roomid], () => getMessages(roomid));
     if(isLoading) return <Loading></Loading>
     if(isError) return <div className="text-center">Error: {error.message}</div>
     if(messages.length === 0) return <NoHistory darkTheme={darkTheme} />;
-
+    
     return (
-        <main className="container mx-auto w-4/5 py-5">
+        <main className={`${isSidebarVisible ? 'container mx-auto w-4/5 py-5' : 'container mx-auto w-4/5 py-5'}`}>
             {
                  messages && messages.map((message, index) => {
                     return(

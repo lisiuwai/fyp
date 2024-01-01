@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from "react-query";
 import { sendMessage } from "@/lib/request";
 
-export default function Input({ roomid, inputText, setInputText, toggleTheme, darkTheme }) {
+export default function Input({ roomid, inputText, setInputText, toggleTheme, darkTheme, isSidebarMinimized }) {
     const queryClient = useQueryClient();
     const [rows, setRows] = useState(1);
     const mutation = useMutation(sendMessage, {
@@ -57,16 +57,16 @@ export default function Input({ roomid, inputText, setInputText, toggleTheme, da
     if (mutation.isError) return <div className="text-center text-gray-50">Error: {mutation.error.message}</div>;
 
     return (
-        <div className={`fixed bottom-0 left-0 w-full z-0 h-40 ${darkTheme ? 'text-gray-50 bg-gradient-to-t from-gray-900' : 'text-gray-900 bg-gray-200'}`}>
-        <div className="grid grid-cols-6 absolute bottom-10 w-full">
-            <div className="col-start-2 col-span-6 flex justify-center items-center w-full">
-                <div className={`w-4/5 px-5 ${darkTheme ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'} rounded-lg flex items-center`}>
+    <div className={`fixed bottom-0 left-0 w-full z-0 h-40 ${darkTheme ? 'text-gray-50 bg-gradient-to-t from-gray-900' : 'text-black bg-gradient-to-t'}`}>
+      <div className="grid grid-cols-6 absolute bottom-10 w-full">
+        <div className={`col-start-1 col-span-6 flex justify-center items-center w-full ${isSidebarMinimized ? 'md:col-start-1 md:col-span-6' : 'md:col-start-2 md:col-span-5'}`}>
+          <div className={`w-4/5 px-5 ${darkTheme ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'} rounded-lg flex items-center`}>
                     <form className={`flex w-full ${darkTheme ? 'shadow-2xl' : 'shadow-md'}`} onSubmit={onSubmit}>
                         <textarea
                             type="text"
                             className={`w-full py-3 focus:outline-none text-lg ${darkTheme ? 'bg-gray-800 text-gray-50' : 'bg-gray-200 text-gray-900'}`}
                             autoFocus
-                            placeholder="type in here"
+                            placeholder="Type in here"
                             value={inputText}
                             onChange={handleInputChange}
                             rows={rows}

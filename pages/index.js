@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Aside from '../components/aside'
 import Main from '../components/main'
 import Input from '../components/input'
@@ -13,6 +13,21 @@ export default function Home() {
   const { isLoading, isError, data, error } = useQuery('rooms', getAllRooms);
   const [inputText, setInputText] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 1080) {
+        setIsSidebarVisible(false);
+      } else {
+        setIsSidebarVisible(true);
+      }
+    }
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);

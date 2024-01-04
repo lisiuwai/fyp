@@ -18,9 +18,9 @@ export default function Input({ roomid, inputText, setInputText, toggleTheme, da
         let rowCount = lines.length;
 
 
-        const maxLineLength = 65;
+        const maxLineLength = 150;
         lines.forEach(line => {
-            (rowCount += Math.floor(line.length / maxLineLength)) - 2;
+            (rowCount += Math.floor(line.length / maxLineLength)) - 1;
         });
 
         return Math.min(rowCount, 5);

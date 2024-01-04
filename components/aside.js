@@ -47,7 +47,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
             console.error('Error updating room name', error);
         }
     };
-    console.log("Is Sidebar Visible in aside:", isSidebarVisible);
+    
     return (
         <>
             {!isSidebarVisible && (
@@ -77,7 +77,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                     <div className="flex flex-col gap-4 px-3">
 
                         <div className="chat_list w-full flex flex-col gap-4 px-3">
-                            {getRooms.map((chat, index) => (
+                            {getRooms.map((chat) => (
                                 <div key={chat._id} className="w-full border-0 rounded-md bg-gray-800 py-1 px-3 flex justify-between items-center">
                                     {isEditing && currentEditingId === chat._id ? (
                                         <>

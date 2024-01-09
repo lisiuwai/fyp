@@ -102,11 +102,10 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                                             <BiPencil onClick={() => startEdit(chat._id, chat.name)} size="1.5em" className="hover:text-green-600" />
                                             <BiTrash onClick={() => {
                                                 if (window.confirm("Are you sure you want to delete this chat room?")) {
-                                                    deleteMutation.mutate(chat._id, {
-                                                        onSuccess: () => {
-                                                            window.location.reload();
-                                                        }
-                                                    });
+                                                    deleteMutation.mutate(chat._id);
+                                                    setTimeout(() => {
+                                                        window.location.reload();
+                                                    }, 500);
                                                 }
                                             }} size="1.5em" className="hover:text-red-600" />
                                         </>

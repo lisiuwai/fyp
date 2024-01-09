@@ -10,23 +10,23 @@ export default ({ ans }) => {
         if (textRef.current) {
             navigator.clipboard.writeText(textRef.current.textContent).then(() => {
                 setHasCopied(true);
-                setTimeout(() => setHasCopied(false), 3000); 
+                setTimeout(() => setHasCopied(false), 3000);
             }).catch(err => {
                 console.error('Could not copy text: ', err);
             });
         }
     };
-
+    const ansArray = typeof ans === 'string' ? ans.split('\n') : [];
     return (
         <div className="flex items-center justify-between rounded-full w-full">
             <div className="flex-none bg-indigo-100 rounded-full p-2" style={{ width: '60px', height: '60px' }}>
                 <Image src="/image/chatbot.png" width={50} height={50} alt="profile" />
             </div>
 
-            <div className="px-4 flex-grow">
-                <p ref={textRef} className="text-q">
-                    {ans}
-                </p>
+            <div className="px-4 flex-grow" ref={textRef}>
+                {ansArray.map((line, index) => (
+                    <div key={index} className="text-q">{line}</div>
+                ))}
             </div>
 
             <div className="flex-none p-2">

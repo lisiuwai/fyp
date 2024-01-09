@@ -39,14 +39,14 @@ export async function createChat(req, res) {
             completion = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo-1106",
                 messages: [
-                    {
+                 /*    {
                         "role": "system",
                         "content": "You are a knowledgeable assistant in computer science. If a question is outside this domain, it will redirect the user to computer science topics with a polite message.'"
-                    },
+                    }, */
                     { "role": "user", "content": question }
                 ],
                 temperature: 0.7,
-                max_tokens: 150,
+                max_tokens: 100,
             });
         } catch (error) {
             console.error("Error in API call:", error);

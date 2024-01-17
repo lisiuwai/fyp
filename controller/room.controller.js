@@ -40,7 +40,7 @@ export async function getRoom(req, res) {
         return res.status(400).json({ error })
     }
 }
-//delete room by id
+
 export async function deleteRoom(req, res) {
     const { id } = req.query;
     if (!id) {
@@ -48,10 +48,8 @@ export async function deleteRoom(req, res) {
     }
 
     try {
-        // Delete all messages associated with that room
+        
         await Message.deleteMany({ room: id });
-
-        // Then delete the room itself
         const deletedRoom = await Room.findByIdAndDelete(id);
         if (!deletedRoom) {
             return res.status(404).json({ error: "Room not found" });

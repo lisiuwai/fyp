@@ -6,6 +6,8 @@ import Loading from '../components/loading'
 import { useQuery } from 'react-query'
 import { getAllRooms } from '../lib/request'
 import Background from '../components/background'
+import { useRouter } from 'next/router';
+import { useAuth } from '../context/authContext';
 
 export default function Home() {
   const [roomid, setRoomid] = useState(null);
@@ -13,6 +15,8 @@ export default function Home() {
   const { isLoading, isError, data, error } = useQuery('rooms', getAllRooms);
   const [inputText, setInputText] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     function handleResize() {
@@ -27,8 +31,15 @@ export default function Home() {
     handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
+
   }, []);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      
+      router.push('/loginpage');
+    }
+  }, [isAuthenticated, router]);
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -52,8 +63,8 @@ export default function Home() {
         <Aside getRooms={data} handler={onRoomClick} isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
       </div>
       <div className={`${darkTheme ? 'bg-gray-800 text-gray-50' : 'bg-gray-200 text-black'} ${isSidebarVisible ? 'col-span-5' : 'col-span-6'} min-h-screen h-full mb-40`}>
-      {roomid ? <Main roomid={roomid} darkTheme={darkTheme} isSidebarVisible={isSidebarVisible} /> : <Background />}
-        {roomid && <Input roomid={roomid} inputText={inputText} setInputText={setInputText} toggleTheme={toggleTheme} darkTheme={darkTheme} isSidebarMinimized={!isSidebarVisible}/>}
+        {roomid ? <Main roomid={roomid} darkTheme={darkTheme} isSidebarVisible={isSidebarVisible} /> : <Background />}
+        {roomid && <Input roomid={roomid} inputText={inputText} setInputText={setInputText} toggleTheme={toggleTheme} darkTheme={darkTheme} isSidebarMinimized={!isSidebarVisible} />}
       </div>
     </div>
   );

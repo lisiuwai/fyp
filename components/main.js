@@ -41,17 +41,18 @@ export default function Main({ roomid, darkTheme, isSidebarVisible }) {
                 messages && messages.map((message, index) => {
                     return (
                         <div key={index}>
+                            <div className="question-response-space">
                             <Question q={message.question}>
                             </Question>
-
+                            </div>
+                            <div className="question-response-space">
                             <Response ans={message.answer}>
                             </Response>
+                            </div>
                         </div>
 
                     )
-
                 })
-
             }
             {
                 showButton && (

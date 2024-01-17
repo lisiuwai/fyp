@@ -24,3 +24,6 @@
 .hidden {
   display: none;
 }
+.question-response-space {
+  margin-top: 1rem; 
+}

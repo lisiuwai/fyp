@@ -6,8 +6,7 @@ import Loading from '../components/loading'
 import { useQuery } from 'react-query'
 import { getAllRooms } from '../lib/request'
 import Background from '../components/background'
-import { useRouter } from 'next/router';
-import { useAuth } from '../context/authContext';
+import { useRequireAuth } from '../context/useRequireAuth';
 
 export default function Home() {
   const [roomid, setRoomid] = useState(null);
@@ -15,8 +14,7 @@ export default function Home() {
   const { isLoading, isError, data, error } = useQuery('rooms', getAllRooms);
   const [inputText, setInputText] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
+
 
   useEffect(() => {
     function handleResize() {
@@ -34,12 +32,14 @@ export default function Home() {
 
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      
-      router.push('/loginpage');
-    }
-  }, [isAuthenticated, router]);
+
+  const isAuthenticated = useRequireAuth();
+
+  if (!isAuthenticated) {
+
+    return null;
+  }
+
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };

@@ -14,29 +14,32 @@ export default async function loginHandler(req, res) {
     const { userid, password } = req.body;
 
     const user = await User.findOne({ userid: userid });
-    console.log("Database query result:", user);
     if (!user) {
-     
       return res.status(401).json({ success: false, message: 'Authentication failed: User not found.' });
-      
     }
-    
-    //alert("User found in database");
 
     if (user.password !== password) {
       console.log("Authentication failed: Incorrect password");
       return res.status(403).json({ success: false, message: 'Authentication failed: Incorrect password.' });
     }
 
-    console.log("Authentication successful");
-
-    const token = jwt.sign(
-      { id: user._id, userid: user.userid },
-      process.env.JWT_SECRET,
-      { expiresIn: '2h' } 
-    );
-
-    res.status(200).json({ success: true, message: 'Login successful', token: token });
+    if (user.password === password) {
+      const token = jwt.sign(
+        { 
+          id: user._id, 
+          userid: user.userid,
+          identify: user.identify 
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '2h' }
+      );
+      res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        token: token,
+        identify: user.identify
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });

@@ -3,14 +3,16 @@ import { useRouter } from 'next/router';
 import { useAuth } from './authContext';
 
 export const useRequireAuth = (redirectUrl = '/loginpage') => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading  } = useAuth();
+  console.log('useRequireAuth - isAuthenticated:', isAuthenticated);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
+      console.log('Redirecting to:', redirectUrl);
       router.push(redirectUrl);
     }
-  }, [isAuthenticated, router, redirectUrl]);
+  }, [isAuthenticated, isLoading, router, redirectUrl]);
 
-  return isAuthenticated;
+  return { isAuthenticated, isLoading  };
 };

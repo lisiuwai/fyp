@@ -2,8 +2,9 @@ import { useRequireAuth } from '../context/useRequireAuth';
 import { BiHome } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import { useAuth } from '../context/authContext';
-export default function manage() {
 
+export default function manage() {
+    const router = useRouter();
 /*     const isAuthenticated = useRequireAuth();
     const router = useRouter();
     const { logout } = useAuth();

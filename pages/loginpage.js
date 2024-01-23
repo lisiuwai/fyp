@@ -25,7 +25,6 @@ export default function Login() {
   
     login(userid, password)
     .then(data => { 
-      console.log(data.identify);  
       if (data.identify === 'teacher') {
         router.push('/teacher');
       } else {

@@ -14,7 +14,7 @@ export default function Home() {
   const { isLoading, isError, data, error } = useQuery('rooms', getAllRooms);
   const [inputText, setInputText] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-
+  const isAuthenticated = useRequireAuth();
 
   useEffect(() => {
     function handleResize() {
@@ -32,11 +32,8 @@ export default function Home() {
 
   }, []);
 
-
-  const isAuthenticated = useRequireAuth();
-
+ 
   if (!isAuthenticated) {
-
     return null;
   }
 

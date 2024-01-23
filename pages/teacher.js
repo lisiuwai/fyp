@@ -1,31 +1,60 @@
-import { useRequireAuth } from '../context/useRequireAuth'; 
-import { BiHome } from 'react-icons/bi';
+import React, { useState, useEffect } from 'react';
+import { useRequireAuth } from '../context/useRequireAuth';
 import { useRouter } from 'next/router';
+import Loading from '../components/loading'
 import { useAuth } from '../context/authContext';
 
 export default function Teacher() {
-    const isAuthenticated = useRequireAuth();
-    const router = useRouter();
-    const { logout } = useAuth();
-    if (!isAuthenticated) {
-      return null;
-    }
-    
-      const handleLogout = () => {
-        logout();
-      };
+  const { isAuthenticated, isLoading } = useRequireAuth();
+  console.log('Teacher page - isAuthenticated:', isAuthenticated);
+  const router = useRouter();
+  const { logout } = useAuth();
+  const [teacherName, setTeacherName] = useState(''); 
 
-    return (
-        <div>
-          <div className="menu-bar">
-              <BiHome size="1.5em"/>          
-            <nav>
-              <button onClick={() => router.push('/manageuser')}>Manage User</button>
-              <button onClick={() => router.push('/change-password')}>Change Password</button>
-              <button onClick={handleLogout}>Logout</button>
-              <span>Teacher Name</span> 
-            </nav>
-          </div>
-        </div>
-      );
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = localStorage.getItem('token');
+      fetch('/api/information', {
+        headers: {
+          'Authorization': `Bearer ${token}` 
+        }
+      })
+        .then((response) => {
+          if (response.ok) return response.json();
+          throw new Error('Network response was not ok');
+        })
+        .then((data) => {
+          setTeacherName(data.name); 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
+  }, [isAuthenticated]);
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  if (isLoading) {
+    return <Loading />; 
+  }
+
+  if (!isAuthenticated) {
+    console.log('Teacher page - User not authenticated, showing loading...');
+    return null;
+  }
+
+  return (
+    <div>
+      <div className="menu-bar">
+        <span>Welcome {teacherName || 'Teacher'}</span>
+        <nav>
+          <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>
+          <button className="change-password" onClick={() => router.push('/change-password')}>Change Password</button>
+          <button className="logout" onClick={handleLogout}>Logout</button>
+        </nav>
+      </div>
+    </div>
+  );
+}

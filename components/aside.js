@@ -1,12 +1,16 @@
-import React, { useState, } from 'react';
-import { BiPlus, BiComment, BiCheck, BiTrash, BiX, BiPencil, BiDockRight, BiDockLeft } from "react-icons/bi";
+import React, { useState, useEffect } from 'react';
+import { BiPlus, BiComment, BiCheck, BiTrash, BiX, BiPencil, BiDockRight, BiDockLeft, BiSolidWinkSmile, BiLogOut } from "react-icons/bi";
 import { useMutation, useQueryClient } from 'react-query';
 import { createRoom, deleteRoom, updateRoom } from '../lib/request';
+import { useAuth } from '../context/authContext';
 
 export default function Aside({ getRooms, handler, isSidebarVisible, toggleSidebar }) {
     const queryclient = useQueryClient();
     const [isEditing, setIsEditing] = useState(false);
     const [currentEditingId, setCurrentEditingId] = useState(null);
+    const { logout } = useAuth();
+    const [userName, setUserName] = useState('');
+
     const [editedName, setEditedName] = useState('');
     const createMutation = useMutation(createRoom, {
         onSuccess: () => {
@@ -46,6 +50,31 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
         } catch (error) {
             console.error('Error updating room name', error);
         }
+    };
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('/api/information', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then((response) => {
+                    if (response.ok) return response.json();
+                    throw new Error('Network response was not ok');
+                })
+                .then((data) => {
+                    setUserName(data.name);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    }, []);
+
+    const handleLogout = () => {
+        logout();
     };
 
     return (
@@ -110,6 +139,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                                             }} size="1.5em" className="hover:text-red-600" />
                                         </>
                                     )}
+
                                 </div>
                             ))}
                         </div>
@@ -117,7 +147,15 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                     </div>
 
                 </div>
-
+                <div className="absolute bottom-0 w-full px-3 py-4 bg-gray-900">
+                    <div className="text-gray-50 mb-2 flex items-center">
+                        Welcome, {userName}<BiSolidWinkSmile className="inline-block ml-1" size='1.5em' />
+                    </div>
+                    <button onClick={handleLogout} className="w-full text-left text-yellow-500 hover:bg-red-600 rounded-md py-2 flex items-center">
+                        <BiLogOut size='1.5em' />
+                        <span className="ml-2">Logout</span>
+                    </button>
+                </div>
             </aside>
         </>
     );

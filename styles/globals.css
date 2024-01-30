@@ -56,10 +56,76 @@
   color: blue;
 }
 
-.menu-bar button.change-password:hover {
+.menu-bar button.edit-profile:hover {
   color: blue;
 }
 
 .menu-bar button.logout:hover {
   color: red;
 }
+
+.search-add-container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #d3d8e2;
+}
+
+.search-bar {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 20px; /* This creates a pill-like shape for the search bar */
+  overflow: hidden; /* Ensures nothing spills out of the border radius */
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 7rem 0.5rem 1rem; /* Adjust padding to make input taller and leave space for the icon */
+  border: none; /* Removes individual border from input */
+  outline: none; /* Removes the outline to integrate with the search bar */
+  font-size: 1rem; /* Adjust the font size if needed */
+}
+
+/* .search-icon {
+  position: absolute;
+  right: 10px; 
+  top: 50%;
+  transform: translateY(-50%); 
+  font-size: 1rem;
+  color: #666; 
+} */
+
+.add-user-btn {
+  margin-left: 1rem; 
+  padding: 0.5rem 1rem; 
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+}
+
+.user-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.user-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background-color: white;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action-icon {
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+

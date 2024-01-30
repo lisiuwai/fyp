@@ -11,9 +11,9 @@ export default async function loginHandler(req, res) {
       return res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 
-    const { userid, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ userid: userid });
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(401).json({ success: false, message: 'Authentication failed: User not found.' });
     }
@@ -27,7 +27,7 @@ export default async function loginHandler(req, res) {
       const token = jwt.sign(
         { 
           id: user._id, 
-          userid: user.userid,
+          email: user.email,
           identify: user.identify 
         },
         process.env.JWT_SECRET,

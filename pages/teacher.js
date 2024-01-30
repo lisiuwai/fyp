@@ -48,10 +48,10 @@ export default function Teacher() {
   return (
     <div>
       <div className="menu-bar">
-        <span>Welcome {teacherName || 'Teacher'}</span>
+        <span>Welcome, {teacherName || 'Teacher'}</span>
         <nav>
           <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>
-          <button className="change-password" onClick={() => router.push('/change-password')}>Change Password</button>
+          <button className="edit-profile" onClick={() => router.push('/change-password')}>Edit profile</button>
           <button className="logout" onClick={handleLogout}>Logout</button>
         </nav>
       </div>

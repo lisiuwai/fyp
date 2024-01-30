@@ -8,14 +8,14 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true); 
   const router = useRouter();
 
-  const login = (userid, password) => {
+  const login = (email, password) => {
     return new Promise((resolve, reject) => {
       fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userid, password }),
+        body: JSON.stringify({ email, password }),
       })
         .then(response => {
           if (response.ok) {

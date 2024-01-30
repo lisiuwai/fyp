@@ -5,7 +5,7 @@ import { useAuth } from '../context/authContext';
 import { BiLowVision, BiShow } from 'react-icons/bi';
 
 export default function Login() {
-  const [userid, setUserId] = useState('');
+  const [email, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false); 
@@ -23,7 +23,7 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    login(userid, password)
+    login(email, password)
     .then(data => { 
       if (data.identify === 'teacher') {
         router.push('/teacher');
@@ -44,7 +44,7 @@ export default function Login() {
       });
 
       if (rememberMe) {
-        localStorage.setItem('rememberMeUserId', userid);
+        localStorage.setItem('rememberMeUserId', email);
       } else {
         localStorage.removeItem('rememberMeUserId');
       }
@@ -59,14 +59,14 @@ export default function Login() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="userId">
-            User ID
+            User Email
           </label>
           <input
-            id="userid"
+            id="email"
             type="text"
-            value={userid}
+            value={email}
             onChange={(e) => setUserId(e.target.value)}
-            placeholder="Enter your User ID"
+            placeholder="Enter your User Email"
             required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />

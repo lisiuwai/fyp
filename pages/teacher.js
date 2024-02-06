@@ -6,7 +6,7 @@ import { useAuth } from '../context/authContext';
 
 export default function Teacher() {
   const { isAuthenticated, isLoading } = useRequireAuth();
-  console.log('Teacher page - isAuthenticated:', isAuthenticated);
+ // console.log('Teacher page - isAuthenticated:', isAuthenticated);
   const router = useRouter();
   const { logout } = useAuth();
   const [teacherName, setTeacherName] = useState(''); 
@@ -41,7 +41,7 @@ export default function Teacher() {
   }
 
   if (!isAuthenticated) {
-    console.log('Teacher page - User not authenticated, showing loading...');
+   // console.log('Teacher page - User not authenticated, showing loading...');
     return null;
   }
 

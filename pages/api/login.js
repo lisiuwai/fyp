@@ -1,10 +1,8 @@
 import jwt from 'jsonwebtoken';
-import connect from '../../database/connect';
 import User from '../../models/user';
 
 export default async function loginHandler(req, res) {
   try {
-    await connect();
 
     if (req.method !== 'POST') {
       res.setHeader('Allow', ['POST']);

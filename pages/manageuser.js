@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRequireAuth } from '../context/useRequireAuth';
-import { BiHome, BiSearch, BiUserPlus, BiTrash, BiEdit } from 'react-icons/bi';
+import { BiHome, BiUserPlus, BiTrash, BiEdit } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import { useAuth } from '../context/authContext';
 
@@ -34,8 +34,12 @@ export default function manage() {
         logout();
     };
 
+    const handleAddUserClick = () => {
+        router.push('/createuser'); 
+      };
+
     const handleDelete = userId => {
-        // Implement the delete logic
+
     };
 
     const handleEdit = userId => {
@@ -66,9 +70,8 @@ export default function manage() {
                         className="search-input"
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-{/*                     <BiSearch className="search-icon" /> */}
                 </div>
-                <button className="add-user-btn" onClick={() => {/* logic to add user */ }}>
+                <button onClick={handleAddUserClick} className="add-user-btn">
                     <BiUserPlus />
                    
                 </button>
@@ -78,7 +81,7 @@ export default function manage() {
                     <div key={user._id} className="user-card">
                         <div className="user-info">
                             <div className="user-name">{user.name}</div>
-                            <BiTrash className="action-icon" onClick={() => handleDelete(user._id)} />
+                            <BiTrash className="action-icon text-red-500" onClick={() => handleDelete(user._id)} />
                             <BiEdit className="action-icon" onClick={() => handleEdit(user._id)} />
                         </div>
                     </div>

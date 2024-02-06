@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../../models/user';
-import dbConnect from '../../database/connect';
 
 export default async function handler(req, res) {
-    await dbConnect();
 
     if (req.method === 'POST') {
         const { authorization } = req.headers;
@@ -19,7 +17,7 @@ export default async function handler(req, res) {
                 console.log('Token validation failed: User not found');
                 return res.status(401).json({ message: 'Token is invalid or user does not exist' });
             }
-            console.log('Token is valid, returning isValid: true');
+            //console.log('Token is valid, returning isValid: true');
             res.status(200).json({ isValid: true });
         } catch (error) {
             console.log('Token validation error:', error.message);

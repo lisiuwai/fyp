@@ -1,8 +1,6 @@
-import connect from '../../database/connect';
 import User from '../../models/user';
-
+import bcrypt from 'bcrypt';
 export default async function handler(req, res) {
-  await connect();
 
   if (req.method === 'GET') {
     try {
@@ -12,7 +10,24 @@ export default async function handler(req, res) {
       res.status(500).json({ success: false, error: error.message });
     }
   } else if (req.method === 'POST') {
-    // Handle user creation
+    const { email, name, password, identify } = req.body;
+
+    try {
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({
+        email,
+        name,
+        password: hashedPassword,
+        identify 
+      });
+
+      // Save user
+      await user.save();
+      res.status(201).json({ success: true, user: user });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
   } else if (req.method === 'PUT') {
     // Handle user update
   } else if (req.method === 'DELETE') {

@@ -4,12 +4,12 @@ import { useAuth } from './authContext';
 
 export const useRequireAuth = (redirectUrl = '/loginpage') => {
   const { isAuthenticated, isLoading  } = useAuth();
-  console.log('useRequireAuth - isAuthenticated:', isAuthenticated);
+ // console.log('useRequireAuth - isAuthenticated:', isAuthenticated);
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      console.log('Redirecting to:', redirectUrl);
+    //  console.log('Redirecting to:', redirectUrl);
       router.push(redirectUrl);
     }
   }, [isAuthenticated, isLoading, router, redirectUrl]);

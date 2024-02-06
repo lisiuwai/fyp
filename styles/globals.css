@@ -74,16 +74,16 @@
 .search-bar {
   position: relative;
   border: 1px solid #ccc;
-  border-radius: 20px; /* This creates a pill-like shape for the search bar */
-  overflow: hidden; /* Ensures nothing spills out of the border radius */
+  border-radius: 20px;
+  overflow: hidden; 
 }
 
 .search-input {
   width: 100%;
-  padding: 0.5rem 7rem 0.5rem 1rem; /* Adjust padding to make input taller and leave space for the icon */
-  border: none; /* Removes individual border from input */
-  outline: none; /* Removes the outline to integrate with the search bar */
-  font-size: 1rem; /* Adjust the font size if needed */
+  padding: 0.5rem 7rem 0.5rem 1rem; 
+  border: none; 
+  outline: none; 
+  font-size: 1rem; 
 }
 
 /* .search-icon {
@@ -116,6 +116,9 @@
   border: 1px solid #ccc;
   padding: 1rem;
   background-color: white;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
 }
 
 .user-info {
@@ -127,5 +130,58 @@
 .action-icon {
   cursor: pointer;
   font-size: 1.3rem;
+  margin-left: 0.5rem; 
 }
+
+.create-user-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.create-user-form label {
+  margin-top: 1rem;
+}
+
+.create-user-form input {
+  border: 2px solid #333; 
+  padding: 0.5rem; 
+  margin-top: 1rem; 
+  background-color: white;
+  color: #333;
+}
+
+.create-user-form select {
+  border: 2px solid #333; 
+  padding: 0.5rem; 
+  margin-top: 0.5rem; 
+  background-color: white; 
+  color: #333; 
+}
+
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.create-btn,
+.cancel-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.create-btn {
+  background-color: #4CAF50; 
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #f44336; 
+  color: white;
+}
+
 

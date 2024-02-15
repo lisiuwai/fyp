@@ -22,15 +22,37 @@ export default async function handler(req, res) {
         identify 
       });
 
-      // Save user
       await user.save();
       res.status(201).json({ success: true, user: user });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
+
   } else if (req.method === 'PUT') {
-    // Handle user update
-  } else if (req.method === 'DELETE') {
+    const { id, email, name, password, identify } = req.body;
+  
+    try {
+      const user = await User.findById(id);
+      
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      user.email = email || user.email;
+      user.name = name || user.name;
+      user.identify = identify || user.identify;
+  
+      if (password) {
+        user.password = await bcrypt.hash(password, 10);
+      }
+  
+      const updatedUser = await user.save();
+  
+      res.status(200).json({ success: true, user: updatedUser });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  }else if (req.method === 'DELETE') {
     // Handle user deletion
   } else {
     res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);

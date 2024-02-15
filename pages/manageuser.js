@@ -42,9 +42,12 @@ export default function manage() {
 
     };
 
-    const handleEdit = userId => {
-        // Implement the edit logic
-    };
+    const handleEdit = (userId) => {
+        router.push({
+          pathname: '/editprofile',
+          query: { id: userId }, 
+        });
+      };
 
     const filteredUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())

@@ -86,14 +86,9 @@
   font-size: 1rem; 
 }
 
-/* .search-icon {
-  position: absolute;
-  right: 10px; 
-  top: 50%;
-  transform: translateY(-50%); 
-  font-size: 1rem;
-  color: #666; 
-} */
+.update-password-checkbox {
+  margin-left: 0.5rem; 
+}
 
 .add-user-btn {
   margin-left: 1rem; 
@@ -140,6 +135,12 @@
   margin: 0 auto;
 }
 
+.create-user-form input[type="password"].disabledInput {
+  background-color: #e0e0e0; 
+  color: #a0a0a0; 
+  border: 2px solid #ccc; 
+}
+
 .create-user-form label {
   margin-top: 1rem;
 }
@@ -183,5 +184,3 @@
   background-color: #f44336; 
   color: white;
 }
-
-

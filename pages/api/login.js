@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../../models/user';
+import bcrypt from 'bcrypt';
 
 export default async function loginHandler(req, res) {
   try {
@@ -16,17 +17,16 @@ export default async function loginHandler(req, res) {
       return res.status(401).json({ success: false, message: 'Authentication failed: User not found.' });
     }
 
-    if (user.password !== password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       console.log("Authentication failed: Incorrect password");
       return res.status(403).json({ success: false, message: 'Authentication failed: Incorrect password.' });
-    }
-
-    if (user.password === password) {
+    } else {
       const token = jwt.sign(
-        { 
-          id: user._id, 
+        {
+          id: user._id,
           email: user.email,
-          identify: user.identify 
+          identify: user.identify
         },
         process.env.JWT_SECRET,
         { expiresIn: '2h' }

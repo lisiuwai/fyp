@@ -9,6 +9,7 @@ export default function Teacher() {
  // console.log('Teacher page - isAuthenticated:', isAuthenticated);
   const router = useRouter();
   const { logout } = useAuth();
+  const [teacherId, setTeacherId] = useState('');
   const [teacherName, setTeacherName] = useState(''); 
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function Teacher() {
         })
         .then((data) => {
           setTeacherName(data.name); 
+          setTeacherId(data._id);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -32,6 +34,18 @@ export default function Teacher() {
     }
   }, [isAuthenticated]);
 
+  const handleEdit = () => {
+    if (teacherId) {
+      router.push({
+        pathname: '/editprofile',
+        query: { id: teacherId },
+      });
+    } else {
+      console.error('No teacher ID available for editing');
+    }
+  };
+  
+  
   const handleLogout = () => {
     logout();
   };
@@ -51,7 +65,7 @@ export default function Teacher() {
         <span>Welcome, {teacherName || 'Teacher'}</span>
         <nav>
           <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>
-          <button className="edit-profile" onClick={() => router.push('/change-password')}>Edit profile</button>
+          <button className="edit-profile" onClick={handleEdit}>Edit profile</button> 
           <button className="logout" onClick={handleLogout}>Logout</button>
         </nav>
       </div>

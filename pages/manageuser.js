@@ -38,10 +38,36 @@ export default function manage() {
         router.push('/createuser'); 
       };
 
-    const handleDelete = userId => {
+      const handleDelete = async (userId) => {
+       
+        const isConfirmed = confirm('Are you sure you want to delete this user?');
+        if (isConfirmed) {
+         
+          try {
 
-    };
-
+            const response = await fetch('/api/userControl', {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: userId }), 
+              });
+              
+            const data = await response.json();
+            if (response.ok) {
+              alert('User deleted successfully');
+              location.reload();
+            } else {
+              alert('Error: ' + data.message);
+            }
+          } catch (error) {
+            console.error('Error deleting user:', error);
+          }
+        } else {
+          console.log('User deletion cancelled');
+        }
+      };
+      
     const handleEdit = (userId) => {
         router.push({
           pathname: '/editprofile',
@@ -60,8 +86,7 @@ export default function manage() {
                     <BiHome size="1.5em" />
                 </button>
                 <nav>
-                    <button> Manage User</button>
-                    <button className="edit-profile" onClick={() => router.push('/change-password')}>Edit profile</button>
+                    <button> Manage User</button>                   
                     <button onClick={handleLogout} >Logout</button>
                 </nav>
             </div>

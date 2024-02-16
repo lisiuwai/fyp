@@ -17,7 +17,7 @@ export default function NoHistory({ darkTheme }) {
                     No Chat History
                 </h1>
                 <p className={`w-3/4 mx-auto text-lg ${subTextColor}`}>
-                    Please start a new conversation.
+                    Start a new conversation.
                 </p>
             </div>
         </div>

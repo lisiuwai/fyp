@@ -66,7 +66,6 @@ export default function create() {
                 </button>
                 <nav>
                     <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>
-                    <button className="edit-profile" onClick={() => router.push('/change-password')}>Edit profile</button>
                     <button className="logout" onClick={handleLogout}>Logout</button>
                 </nav>
             </div>

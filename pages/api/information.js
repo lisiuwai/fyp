@@ -18,8 +18,8 @@ export default async function handler(req, res) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const { name, role } = user;
-      res.status(200).json({ name, role });
+      const { name, role, _id } = user;
+      res.status(200).json({ name, role, _id });
     } else {
       res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${req.method} Not Allowed`);

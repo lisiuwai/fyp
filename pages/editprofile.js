@@ -49,7 +49,7 @@ export default function EditProfile() {
       if (response.ok) {
         window.alert('User profile is successfully updated');
         setTimeout(() => {
-          router.push('/manageuser');
+          router.back();
         },);
       } else {
         window.alert('Failed to update user');
@@ -60,7 +60,7 @@ export default function EditProfile() {
   };
 
   const handleCancel = () => {
-    router.push('/manageuser');
+    router.back();
   };
 
   if (!isAuthenticated) {
@@ -77,8 +77,7 @@ export default function EditProfile() {
           <BiHome size="1.5em" />
         </button>
         <nav>
-          <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>
-          <button className="edit-profile" onClick={() => router.push('/change-password')}>Edit profile</button>
+          <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>       
           <button className="logout" onClick={handleLogout}>Logout</button>
         </nav>
       </div>

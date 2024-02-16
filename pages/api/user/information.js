@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import User from '../../models/user';
-import connect from '../../database/connect';
+import User from '../../../models/user';
+import connect from '../../../database/connect';
 
 export default async function handler(req, res) {
   try {

@@ -1,6 +1,6 @@
-import User from '../../models/user';
+import User from '../../../models/user';
 import bcrypt from 'bcrypt';
-import connect from '../../database/connect';
+import connect from '../../../database/connect';
 
 export default async function handler(req, res) {
   await connect();

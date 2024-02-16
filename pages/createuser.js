@@ -16,7 +16,7 @@ export default function create() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-          const response = await fetch('/api/userControl', {
+          const response = await fetch('/api/user/userControl', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -37,13 +37,10 @@ export default function create() {
           if (result.success) {
         
             router.push('/manageuser');
-          } else {
-            // Handle error, show error message to user
-          }
+          } 
         } catch (error) {
           console.error('An error occurred:', error);
-          // Handle error, show error message to user
-        }
+        } 
       };
 
     const handleCancel = () => {
@@ -56,7 +53,6 @@ export default function create() {
     const handleLogout = () => {
         logout();
     };
-
 
     return (
         <div>

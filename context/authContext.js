@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     return new Promise((resolve, reject) => {
-      fetch('http://localhost:3000/api/login', {
+      fetch('http://localhost:3000/api/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     //console.log('Token from local storage:', token);
     if (token) {
       try {
-        const response = await fetch('/api/token', {
+        const response = await fetch('/api/user/token', {
           method: 'POST',
           headers: new Headers({
             'Authorization': `Bearer ${token}`,

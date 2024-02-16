@@ -17,7 +17,7 @@ export default function EditProfile() {
 
   useEffect(() => {
     if (id) {
-      fetch(`/api/${id}`)
+      fetch(`/api/user/${id}`)
         .then(response => response.json())
         .then(data => {
           setEmail(data.email);
@@ -32,7 +32,7 @@ export default function EditProfile() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`/api/${id}`, {
+      const response = await fetch(`/api/user/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

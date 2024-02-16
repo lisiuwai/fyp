@@ -15,7 +15,7 @@ export default function manage() {
     }
 
     useEffect(() => {
-        fetch('/api/userControl')
+        fetch('/api/user/userControl')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -45,7 +45,7 @@ export default function manage() {
          
           try {
 
-            const response = await fetch('/api/userControl', {
+            const response = await fetch('/api/user/userControl', {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',

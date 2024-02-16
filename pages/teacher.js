@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRequireAuth } from '../context/useRequireAuth';
+import { BsEmojiSmile } from "react-icons/bs";
 import { useRouter } from 'next/router';
 import Loading from '../components/loading'
 import { useAuth } from '../context/authContext';
@@ -15,7 +16,7 @@ export default function Teacher() {
   useEffect(() => {
     if (isAuthenticated) {
       const token = localStorage.getItem('token');
-      fetch('/api/information', {
+      fetch('/api/user/information', {
         headers: {
           'Authorization': `Bearer ${token}` 
         }
@@ -62,7 +63,7 @@ export default function Teacher() {
   return (
     <div>
       <div className="menu-bar">
-        <span>Welcome, {teacherName || 'Teacher'}</span>
+        <span>Welcome, {teacherName || 'Teacher'}<BsEmojiSmile className="inline-block ml-1" size='1.2em' /></span>
         <nav>
           <button className="manage-user" onClick={() => router.push('/manageuser')}>Manage User</button>
           <button className="edit-profile" onClick={handleEdit}>Edit profile</button> 

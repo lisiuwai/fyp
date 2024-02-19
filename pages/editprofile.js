@@ -20,9 +20,14 @@ export default function EditProfile() {
       fetch(`/api/user/${id}`)
         .then(response => response.json())
         .then(data => {
-          setEmail(data.email);
-          setName(data.name);
-          setIdentify(data.identify);
+          if (data.identify !== 'teacher') {
+            alert('Access denied: You are not a teacher');
+            router.push('/'); 
+          }else{
+            setEmail(data.email);
+            setName(data.name);
+            setIdentify(data.identify);
+          }       
         })
         .catch(error => console.error('Error fetching user data:', error));
     }

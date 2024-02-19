@@ -26,8 +26,14 @@ export default function Teacher() {
           throw new Error('Network response was not ok');
         })
         .then((data) => {
-          setTeacherName(data.name); 
-          setTeacherId(data._id);
+          if (data.identify !== 'teacher') {
+            console.log(data);
+            alert('Access denied: You are not a teacher');
+            router.push('/'); 
+          } else {
+            setTeacherName(data.name); 
+            setTeacherId(data._id);
+          }
         })
         .catch((error) => {
           console.error('Error:', error);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRequireAuth } from '../context/useRequireAuth';
 import { BiHome } from 'react-icons/bi';
 import { useRouter } from 'next/router';
@@ -12,36 +12,63 @@ export default function create() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [identify, setIdentify] = useState('');
+    const [alertShown, setAlertShown] = useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated ) {
+          const token = localStorage.getItem('token');
+          fetch('/api/user/information', {
+            headers: {
+              'Authorization': `Bearer ${token}` 
+            }
+          })
+            .then((response) => {
+              if (response.ok) return response.json();
+              throw new Error('Network response was not ok');
+            })
+            .then((data) => {
+              if (data.identify !== 'teacher' && !alertShown) {
+                alert('Access denied: You are not a teacher');
+                setAlertShown(true);
+                router.push('/'); 
+              } 
+              
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        }
+      }, [isAuthenticated, alertShown, router]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-          const response = await fetch('/api/user/userControl', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              name,
-              password,
-              identify 
-            }),
-          });
-      
-          if (!response.ok) {
-            throw new Error('Failed to create user');
-          }
-      
-          const result = await response.json();
-          if (result.success) {
-        
-            router.push('/manageuser');
-          } 
+            const response = await fetch('/api/user/userControl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    name,
+                    password,
+                    identify
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create user');
+            }
+
+            const result = await response.json();
+            if (result.success) {
+
+                router.push('/manageuser');
+            }
         } catch (error) {
-          console.error('An error occurred:', error);
-        } 
-      };
+            console.error('An error occurred:', error);
+        }
+    };
 
     const handleCancel = () => {
         router.push('/manageuser');

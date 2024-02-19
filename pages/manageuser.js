@@ -10,9 +10,35 @@ export default function manage() {
     const { logout } = useAuth();
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [alertShown, setAlertShown] = useState(false);
     if (!isAuthenticated) {
         return null;
     }
+    
+    useEffect(() => {
+      if (isAuthenticated) {
+        const token = localStorage.getItem('token');
+        fetch('/api/user/information', {
+          headers: {
+            'Authorization': `Bearer ${token}` 
+          }
+        })
+          .then((response) => {
+            if (response.ok) return response.json();
+            throw new Error('Network response was not ok');
+          })
+          .then((data) => {
+            if (data.identify !== 'teacher' && !alertShown) {
+              alert('Access denied: You are not a teacher');
+              router.push('/'); 
+              setAlertShown(true);
+            } 
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
+    }, [isAuthenticated, alertShown]);
 
     useEffect(() => {
         fetch('/api/user/userControl')
@@ -23,7 +49,7 @@ export default function manage() {
                 return response.json();
             })
             .then(data => {
-                setUsers(data); 
+              setUsers(data);            
             })
             .catch(error => {
                 console.error('Error:', error);

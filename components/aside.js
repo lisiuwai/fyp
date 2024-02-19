@@ -55,7 +55,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            fetch('/api/information', {
+            fetch('/api/user/information', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -3,6 +3,7 @@ import { Schema,model,models } from "mongoose";
 const MessageSchema = new Schema({
     question : String,
     answer : String,
+    keywords: [String],
     room : {
         type: Schema.Types.ObjectId,
         ref :'Room'

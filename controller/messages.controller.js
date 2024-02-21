@@ -2,6 +2,7 @@ import OpenAI from 'openai';
 import Message from "../models/message.model";
 import Room from "../models/room.model";
 import ENV from '../config.env';
+import nlp from 'compromise';
 
 export async function getChat(req, res) {
     try {
@@ -65,11 +66,30 @@ export async function createChat(req, res) {
         }
 
         const messageText = messageChoice.message.content;
+        const keywords = extractKeywords(question);
+
+        function extractKeywords(text) {
+            let doc = nlp(text);
+            let keywords = doc.nouns().out('array'); 
+          
+            if (keywords.length === 0) {
+                
+                const match = text.match(/what is\s+(.*)/i);
+                if (match) {   
+                    return [match[1]]; 
+                } else {    
+                    return [text.split(/\s+/).slice(0, 7).join(' ')];
+                }
+            }
+            return keywords; 
+        }
+        
 
         const message = new Message({
             question: question,
             answer: messageText,
-            room: roomid
+            room: roomid,
+            keywords: keywords
         });
 
         await message.save();

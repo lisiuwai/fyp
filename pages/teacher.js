@@ -7,11 +7,11 @@ import { useAuth } from '../context/authContext';
 
 export default function Teacher() {
   const { isAuthenticated, isLoading } = useRequireAuth();
- // console.log('Teacher page - isAuthenticated:', isAuthenticated);
   const router = useRouter();
   const { logout } = useAuth();
   const [teacherId, setTeacherId] = useState('');
   const [teacherName, setTeacherName] = useState(''); 
+  const [mostFrequentQuestions, setMostFrequentQuestion] = useState([]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,7 +27,6 @@ export default function Teacher() {
         })
         .then((data) => {
           if (data.identify !== 'teacher') {
-            console.log(data);
             alert('Access denied: You are not a teacher');
             router.push('/'); 
           } else {
@@ -41,6 +40,21 @@ export default function Teacher() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetch('/api/course/mostFrequentQuestion')
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.success) {
+            setMostFrequentQuestion(data.data);
+           
+          }
+        })
+        .catch((error) => console.error("Failed to fetch most frequent question", error));
+    }
+  }, [isAuthenticated]); 
+  
   const handleEdit = () => {
     if (teacherId) {
       router.push({
@@ -62,7 +76,6 @@ export default function Teacher() {
   }
 
   if (!isAuthenticated) {
-   // console.log('Teacher page - User not authenticated, showing loading...');
     return null;
   }
 
@@ -76,6 +89,20 @@ export default function Teacher() {
           <button className="logout" onClick={handleLogout}>Logout</button>
         </nav>
       </div>
+      <div>
+      {mostFrequentQuestions.length > 0 && (
+        <div>
+          <h3>Top 5 Most Frequent Questions:</h3>
+          <ul>
+            {mostFrequentQuestions.map((q, index) => (
+              <li key={index}>
+                {q._id} (Asked {q.count} times)
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
     </div>
   );
 }

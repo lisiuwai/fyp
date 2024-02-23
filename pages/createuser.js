@@ -32,7 +32,6 @@ export default function create() {
                 setAlertShown(true);
                 router.push('/'); 
               } 
-              
             })
             .catch((error) => {
               console.error('Error:', error);
@@ -62,7 +61,6 @@ export default function create() {
 
             const result = await response.json();
             if (result.success) {
-
                 router.push('/manageuser');
             }
         } catch (error) {

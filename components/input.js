@@ -10,14 +10,11 @@ export default function Input({ roomid, inputText, setInputText, toggleTheme, da
         onSuccess: () => {
             queryClient.invalidateQueries('messages');
         }
-
     });
 
     const calculateRows = (text) => {
         const lines = text.split('\n');
         let rowCount = lines.length;
-
-
         const maxLineLength = 150;
         lines.forEach(line => {
             (rowCount += Math.floor(line.length / maxLineLength)) - 1;
@@ -86,9 +83,7 @@ export default function Input({ roomid, inputText, setInputText, toggleTheme, da
                         {darkTheme ? <BiSolidMoon size="1.5em" /> : <BiSun size="1.5em" />}
                     </button>
                 </div>
-
             </div>
-
         </div>
     );
 }

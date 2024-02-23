@@ -32,7 +32,6 @@ export default function Home() {
 
   }, []);
 
- 
   if (!isAuthenticated) {
     return null;
   }

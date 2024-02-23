@@ -115,7 +115,6 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                                                 value={editedName}
                                                 onChange={(e) => setEditedName(e.target.value)}
                                                 className="text-left truncate w-full text-black"
-
                                             />
                                             <BiCheck onClick={() => saveEdit(chat._id)} size="1.5em" className="hover:text-green-600" />
                                             <BiX onClick={cancelEdit} size="1.5em" className="hover:text-red-600" />
@@ -143,7 +142,6 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                                 </div>
                             ))}
                         </div>
-
                     </div>
 
                 </div>

@@ -66,7 +66,6 @@ export default function Teacher() {
     }
   };
   
-  
   const handleLogout = () => {
     logout();
   };

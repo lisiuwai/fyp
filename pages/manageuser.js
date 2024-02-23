@@ -127,7 +127,6 @@ export default function manage() {
                 </div>
                 <button onClick={handleAddUserClick} className="add-user-btn">
                     <BiUserPlus />
-                   
                 </button>
             </div>
             <div className="user-card-container">

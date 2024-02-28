@@ -69,22 +69,31 @@ export async function createChat(req, res) {
         const keywords = extractKeywords(question);
 
         function extractKeywords(text) {
+            const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
             let doc = nlp(text);
-            let keywords = doc.nouns().out('array'); 
-          
+            const stopwords = ['you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an'];
+            let keywords = doc.nouns().out('array');
+        
             if (keywords.length === 0) {
-                
                 const match = text.match(/what is\s+(.*)/i);
-                if (match) {   
-                    return [match[1]]; 
-                } else {    
-                    return [text.split(/\s+/).slice(0, 7).join(' ')];
+                if (match) {
+                    let filteredMatch = match[1].split(' ')
+                        .filter(word => !stopwords.includes(word.toLowerCase()))
+                        .map(word => word.replace(punctuationRegex, ''))
+                        .join(' ');
+                    return [filteredMatch];
+                } else {
+                    let fallbackKeywords = text.split(/\s+/)
+                        .filter(word => !stopwords.includes(word.toLowerCase()))
+                        .map(word => word.replace(punctuationRegex, ''))
+                        .slice(0, 5)
+                        .join(' ');
+                    return [fallbackKeywords];
                 }
             }
-            return keywords; 
+            return keywords.join(' ');
         }
         
-
         const message = new Message({
             question: question,
             answer: messageText,

@@ -102,9 +102,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
                         )}
                     </div>
 
-
-                    <div className="flex flex-col gap-4 px-3">
-
+                    <div className="flex flex-col gap-4 px-3" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}} >
                         <div className="chat_list w-full flex flex-col gap-4 px-3">
                             {getRooms.map((chat) => (
                                 <div key={chat._id} className="w-full border-0 rounded-md bg-gray-800 py-1 px-3 flex justify-between items-center">

@@ -5,8 +5,13 @@ export default async function handler(req, res) {
     try {
       const mostFrequentQuestions = await Message.aggregate([
         {
+          $addFields: {
+            trimmedQuestion: { $trim: { input: "$question" } }
+          }
+        },
+        {
           $group: {
-            _id: "$question",
+            _id: "$trimmedQuestion",
             count: { $sum: 1 }
           }
         },
@@ -15,7 +20,14 @@ export default async function handler(req, res) {
       ]);
   
       if (mostFrequentQuestions.length > 0) {
-        return res.status(200).json({ success: true, data: mostFrequentQuestions });
+
+        const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
+        const cleanedQuestions = mostFrequentQuestions.map(question => ({
+          ...question,
+          _id: question._id.replace(punctuationRegex, '')
+        }));
+  
+        return res.status(200).json({ success: true, data: cleanedQuestions });
       } else {
         return res.status(404).json({ success: false, error: "No questions found." });
       }

@@ -37,7 +37,7 @@ export default function Input({ roomid, inputText, setInputText, toggleTheme, da
     function onSubmit(e) {
         e.preventDefault();
         if (inputText.trim()) {
-            mutation.mutate({ roomid, message: inputText });
+            mutation.mutate({ roomid, message: inputText.trim() });
             setInputText('');
             setRows(1);
         }

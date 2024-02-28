@@ -55,7 +55,7 @@ export default function Login() {
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 text-center">
      
         <div className="mb-4">
-          <Image src="/image/a.gif" alt="Login Image" width={400} height={200} />
+          <Image src="/image/login.png" alt="Login Image" width={400} height={200} />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="userId">

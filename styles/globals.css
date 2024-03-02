@@ -184,3 +184,24 @@
   background-color: #f44336; 
   color: white;
 }
+
+.course-form {
+  display: flex;
+  flex-direction: column;
+  margin: 0 1em;
+  width: 100%;
+}
+
+.course-form label {
+  margin-top: 1rem;
+}
+
+.course-form input {
+  border: 1px solid #333;
+  padding: 0.5rem;
+  margin-top: 0.2rem;
+  background-color: white;
+  color: #333;
+  width: 95%;
+  box-sizing: border-box; 
+}

@@ -11,6 +11,14 @@ export default function Teacher() {
   const { logout } = useAuth();
   const [teacherId, setTeacherId] = useState('');
   const [teacherName, setTeacherName] = useState('');
+  const [contactInfo, setContactInfo] = useState('');
+  const [studentNumber, setstudentNumber] = useState('');
+  const [assignment, setassignment] = useState('');
+  const [project, setproject] = useState('');
+  const [exam, setexam] = useState('');
+  const [deadline, setdeadline] = useState('');
+  const [msassignment, setmsassignment] = useState('');
+  const [msproject, setmsproject] = useState('');
   const [mostFrequentQuestions, setMostFrequentQuestion] = useState([]);
   const [topKeywords, setTopKeywords] = useState([]);
 
@@ -46,7 +54,6 @@ export default function Teacher() {
       fetch('/api/course/mostFrequentQuestion')
         .then((response) => response.json())
         .then((data) => {
-          //  console.log(data);
           if (data.success) {
             setMostFrequentQuestion(data.data);
 
@@ -62,7 +69,6 @@ export default function Teacher() {
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            console.log(data);
             setTopKeywords(data.data);
           } else {
             setTopKeywords([]);
@@ -71,6 +77,32 @@ export default function Teacher() {
         .catch(error => console.error("Failed to fetch top keywords", error));
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await fetch('/api/course/information'); 
+        if (!response.ok) throw new Error('Failed to fetch course data');
+        const data = await response.json();
+        console.log(data);
+        setContactInfo(data.data.contactInfo);
+        setstudentNumber(data.data.studentNumber);
+        setassignment(data.data.assignment);
+        setproject(data.data.project);
+        setexam(data.data.exam);
+        setdeadline(data.data.deadline);
+        setmsassignment(data.data.msassignment);
+        setmsproject(data.data.msproject);
+        setstudentNumber(data.data.studentNumber);
+      } catch (error) {
+        console.error('Error fetching course data:', error);
+      }
+    };
+  
+    if (isAuthenticated) {
+      fetchCourse();
+    }
+  }, [isAuthenticated]); 
 
   const handleEdit = () => {
     if (teacherId) {
@@ -95,6 +127,38 @@ export default function Teacher() {
     return null;
   }
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = {
+      contactInfo: event.target.contactInfo.value,
+      studentNumber: event.target.studentNumber.value,
+      assignment: event.target.assignment.value,
+      project: event.target.project.value,
+      exam: event.target.exam.value,
+      deadline: event.target.deadline.value,
+      msassignment: event.target.msassignment.value,
+      msproject: event.target.msproject.value
+    };
+
+    try {
+      const response = await fetch('/api/course/information', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Course updated successfully');
+      } else {
+        console.error('Failed to update course');
+      }
+    } catch (error) {
+      console.error('Failed to send form data:', error);
+    }
+  };
+
   return (
     <div>
       <div className="menu-bar">
@@ -106,30 +170,30 @@ export default function Teacher() {
         </nav>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '50%', margin: '1em' }}>
           {mostFrequentQuestions.length > 0 && (
             <div>
               <h3>Top 5 Most Frequent Questions:</h3>
               <ul>
                 {mostFrequentQuestions.map((q, index) => (
                   <li key={index} style={{ color: index % 2 === 0 ? 'blue' : 'inherit' }}>
-                  {q._id} (Asked {q.count} times)
-                </li>
+                    {q._id} (Asked {q.count} times)
+                  </li>
                 ))}
               </ul>
             </div>
           )}
         </div>
 
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '50%', margin: '1em' }}>
           {topKeywords.length > 0 ? (
             <div>
               <h3 >Top 10 Keywords:</h3>
               <ul>
                 {topKeywords.map((keyword, index) => (
-                   <li key={index} style={{ color: index % 2 === 0 ? 'blue' : 'inherit' }}>
-                   {keyword._id} (Mentioned {keyword.count} times)
-                 </li>
+                  <li key={index} style={{ color: index % 2 === 0 ? 'blue' : 'inherit' }}>
+                    {keyword._id} (Mentioned {keyword.count} times)
+                  </li>
                 ))}
               </ul>
             </div>
@@ -138,6 +202,91 @@ export default function Teacher() {
           )}
         </div>
       </div>
+      <form onSubmit={handleSubmit} className="course-form">
+        <div>
+          <label>Contact information of this course:</label>
+          <input
+            type="text"
+            name="contactInfo"
+            value={contactInfo}
+            onChange={e => setContactInfo(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Number of students in the group project:</label>
+          <input
+            type="text"
+            name="studentNumber"
+            value={studentNumber}
+            onChange={e => setstudentNumber(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Requirements of the assignment:</label>
+          <input
+            type="text"
+            name="assignment"
+            value={assignment}
+            onChange={e => setassignment(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Requirements of the project:</label>
+          <input
+            type="text"
+            name="project"
+            value={project}
+            onChange={e => setproject(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Exam format and tips:</label>
+          <input
+            type="text"
+            name="exam"
+            value={exam}
+            onChange={e => setexam(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Deadline of the assignment/project:</label>
+          <input
+            type="text"
+            name="deadline"
+            value={deadline}
+            onChange={e => setdeadline(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Marking scheme of the assignment:</label>
+          <input
+            type="text"
+            name="msassignment"
+            value={msassignment}
+            onChange={e => setmsassignment(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Marking scheme of the project:</label>
+          <input
+            type="text"
+            name="msproject"
+            value={msproject}
+            onChange={e => setmsproject(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-actions">
+          <button type="submit" className="create-btn">Submit</button>
+        </div>
+      </form>
     </div>
   );
 }

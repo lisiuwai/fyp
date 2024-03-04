@@ -1,5 +1,5 @@
 export default function NoHistory({ darkTheme }) {
-    console.log("Dark Theme in NoHistory:", darkTheme);
+    
     const bgColor = darkTheme ? "bg-gray-800" : "bg-gray-200";
     const textColor = darkTheme ? "text-gray-200" : "text-gray-900"; 
     const subTextColor = darkTheme ? "text-gray-400" : "text-gray-600"; 

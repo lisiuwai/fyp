@@ -44,21 +44,36 @@ export async function createChat(req, res) {
 
         const keywords = extractKeywords(question);
 
+        function extractKeywords(text) {
+            const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
+            text = text.replace(punctuationRegex, '').toLowerCase(); 
+            const stopwords = ['i', 'you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an','to','ask'];
+            const words = text.split(/\s+/).filter(word => !stopwords.includes(word)); 
+
+            let doc = nlp(words.join(' ')); 
+            let keywords = doc.nouns().out('array');
+          
+            if (keywords.length === 0) {
+                return words.slice(0, 5).join(' '); 
+            }
+            return keywords.join(' '); 
+          }
+
         const keywordMatch = Object.keys(courseInfoKeywords).find(keyword => 
             question.toLowerCase().includes(keyword)
         );
 
         if (keywordMatch) {
             const courseField = courseInfoKeywords[keywordMatch];
-            const course = await Course.findOne(); // Adjust this line to match how you get the course info
+            const course = await Course.findOne(); 
             if (!course || !course[courseField]) {
                 console.log("Course information not found for keyword: ", keywordMatch);
                 return res.status(404).json({ error: "Course information not found" });
             }
 
-            // Create a message with the course information
             const messageText = course[courseField];
             console.log(`Responding with course information: ${messageText}`);
+
             const message = new Message({
                 question,
                 answer: messageText,
@@ -73,31 +88,7 @@ export async function createChat(req, res) {
 
         }
         
-        function extractKeywords(text) {
-            const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
-            let doc = nlp(text);
-            const stopwords = ['i','you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an'];
-            let keywords = doc.nouns().out('array');
-
-            if (keywords.length === 0) {
-                const match = text.match(/what is\s+(.*)/i);
-                if (match) {
-                    let filteredMatch = match[1].split(' ')
-                        .filter(word => !stopwords.includes(word.toLowerCase()))
-                        .map(word => word.replace(punctuationRegex, ''))
-                        .join(' ');
-                    return [filteredMatch];
-                } else {
-                    let fallbackKeywords = text.split(/\s+/)
-                        .filter(word => !stopwords.includes(word.toLowerCase()))
-                        .map(word => word.replace(punctuationRegex, ''))
-                        .slice(0, 5)
-                        .join(' ');
-                    return [fallbackKeywords];
-                }
-            }
-            return keywords.join(' ');
-        }
+   
         const openai = new OpenAI({
             apiKey: ENV.OPENAI_API_KEY,
         });

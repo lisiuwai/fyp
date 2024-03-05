@@ -2,30 +2,20 @@ import Message from '../../../models/message.model';
 import nlp from 'compromise';
 
 function extractKeywords(text) {
-    const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
-    let doc = nlp(text);
-    const stopwords = ['you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an'];
-    let keywords = doc.nouns().out('array');
+  const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
+  text = text.replace(punctuationRegex, '').toLowerCase(); 
+  const stopwords = ['i', 'you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an','to','ask'];
+  const words = text.split(/\s+/).filter(word => !stopwords.includes(word)); 
 
-    if (keywords.length === 0) {
-        const match = text.match(/what is\s+(.*)/i);
-        if (match) {
-            let filteredMatch = match[1].split(' ')
-                .filter(word => !stopwords.includes(word.toLowerCase()))
-                .map(word => word.replace(punctuationRegex, ''))
-                .join(' ');
-            return [filteredMatch];
-        } else {
-            let fallbackKeywords = text.split(/\s+/)
-                .filter(word => !stopwords.includes(word.toLowerCase()))
-                .map(word => word.replace(punctuationRegex, ''))
-                .slice(0, 5)
-                .join(' ');
-            return [fallbackKeywords];
-        }
-    }
-    return keywords.join(' ');
+  let doc = nlp(words.join(' ')); 
+  let keywords = doc.nouns().out('array');
+
+  if (keywords.length === 0) {
+      return words.slice(0, 5).join(' '); 
+  }
+  return keywords.join(' '); 
 }
+
 
 export default async function handler(req, res) {
    

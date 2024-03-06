@@ -14,7 +14,27 @@ export default function Home() {
   const { isLoading, isError, data, error } = useQuery('rooms', getAllRooms);
   const [inputText, setInputText] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const isAuthenticated = useRequireAuth();
+  const { isAuthenticated, user } = useRequireAuth();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const fetchRooms = async () => {
+        try {
+          // Update to pass user details to `getAllRooms` if necessary
+          const response = await getAllRooms(user.email); // Example: passing user email
+          if (response.success) {
+            setRooms(response.data);
+          } else {
+            console.error("Failed to fetch rooms");
+          }
+        } catch (error) {
+          console.error("Error fetching rooms:", error);
+        }
+      };
+
+      fetchRooms();
+    }
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     function handleResize() {

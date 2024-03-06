@@ -10,13 +10,15 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
     const [currentEditingId, setCurrentEditingId] = useState(null);
     const { logout } = useAuth();
     const [userName, setUserName] = useState('');
+    const { userEmail } = useAuth();
+
 
     const [editedName, setEditedName] = useState('');
-    const createMutation = useMutation(createRoom, {
+    const createMutation = useMutation(email => createRoom(email), {
         onSuccess: () => {
             queryclient.invalidateQueries('rooms')
         }
-    })
+    });
 
     const deleteMutation = useMutation(deleteRoom, {
         onSuccess: () => {
@@ -76,6 +78,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
     const handleLogout = () => {
         logout();
     };
+   //console.log('Attempting to create room with userEmail:', userEmail);
 
     return (
         <>
@@ -92,7 +95,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
             <aside className={`fixed left-0 w-80 h-screen bg-gray-900 ${isSidebarVisible ? '' : 'hidden'}`}>
                 <div className="text-gray-50 py-3">
                     <div className="flex justify-between items-center w-full mb-5">
-                        <button className="border rounded-md border-gray-600 w-4/5 hover:bg-blue-600 text-left py-3" onClick={() => createMutation.mutate()} >
+                        <button className="border rounded-md border-gray-600 w-4/5 hover:bg-blue-600 text-left py-3" onClick={() => createMutation.mutate(userEmail)} >
                             <BiPlus className="inline mx-2" size={19} /> New Chat
                         </button>
                         {isSidebarVisible && (

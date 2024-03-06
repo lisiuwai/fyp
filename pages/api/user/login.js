@@ -35,7 +35,8 @@ export default async function loginHandler(req, res) {
         success: true,
         message: 'Login successful',
         token: token,
-        identify: user.identify
+        identify: user.identify,
+        email: user.email
       });
     }
   } catch (error) {

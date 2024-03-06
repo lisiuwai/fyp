@@ -14,17 +14,19 @@ export async function getAllRooms(req, res) {
 // POST http://localhost:3000/api/room
 export async function createRoom(req, res) {
     try {
-
-        const len = await (await Room.find({})).length;
+        const { email } = req.body; 
+        console.log('Email received:', email);
+        const len = await Room.countDocuments({});
         const defaultRoom = {
             name: `Room ${len + 1}`,
-            messages: []
-        }
+            email, 
+            messages: [],
+        };
 
         const chat = await Room.create(defaultRoom);
-        return res.status(200).json({ success: true, data: chat })
+        return res.status(200).json({ success: true, data: chat });
     } catch (error) {
-        return res.status(400).json({ error })
+        return res.status(400).json({ error });
     }
 }
 //get room by id

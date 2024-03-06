@@ -6,6 +6,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true); 
+  const [userEmail, setUserEmail] = useState('');
   const router = useRouter();
 
   const login = (email, password) => {
@@ -25,11 +26,13 @@ export const AuthProvider = ({ children }) => {
           }
         })
         .then(data => {
-          if (data.token) {
+          console.log(data);
+          if (data.token && data.email) { 
             localStorage.setItem('token', data.token);
+            setUserEmail(data.email); 
+            setIsAuthenticated(true);
+            resolve(data);
           }
-          setIsAuthenticated(true);
-          resolve(data);
         })
         .catch(error => {
           reject(error);
@@ -74,7 +77,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{
-      isAuthenticated, isLoading, login, logout, checkAuthStatus
+      isAuthenticated, isLoading, login, logout, checkAuthStatus,userEmail 
     }}>
       {children}
     </AuthContext.Provider>

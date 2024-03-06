@@ -1,11 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
-import connect from '../../../database/connect';
 
 export default async function handler(req, res) {
   try {
-    await connect();
-    
     if (req.method === 'GET') {
       const token = req.headers.authorization?.split(' ')[1];
       if (!token) {
@@ -18,8 +15,8 @@ export default async function handler(req, res) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const { name, role, _id,identify } = user;
-      res.status(200).json({ name, role, _id, identify });
+      const { name, role, _id,identify,email } = user;
+      res.status(200).json({ name, role, _id, identify,email });
     } else {
       res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${req.method} Not Allowed`);

@@ -10,10 +10,19 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
     const [currentEditingId, setCurrentEditingId] = useState(null);
     const { logout } = useAuth();
     const [userName, setUserName] = useState('');
-    const { userEmail } = useAuth();
+    const { userEmail, setUserEmail  } = useAuth();
 
 
     const [editedName, setEditedName] = useState('');
+
+    useEffect(() => {
+        const storedEmail = localStorage.getItem('userEmail');
+        console.log(storedEmail);
+        if (storedEmail) {
+            setUserEmail(storedEmail); 
+        }
+    }, [setUserEmail]);
+    
     const createMutation = useMutation(email => createRoom(email), {
         onSuccess: () => {
             queryclient.invalidateQueries('rooms')
@@ -78,7 +87,7 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
     const handleLogout = () => {
         logout();
     };
-   //console.log('Attempting to create room with userEmail:', userEmail);
+   console.log('Attempting to create room with userEmail:', userEmail);
 
     return (
         <>

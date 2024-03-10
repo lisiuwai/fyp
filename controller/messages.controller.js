@@ -85,10 +85,8 @@ export async function createChat(req, res) {
             room.messages.push(message._id);
             await room.save();
             return res.status(200).json({ success: true, data: message });
-
         }
         
-   
         const openai = new OpenAI({
             apiKey: ENV.OPENAI_API_KEY,
         });
@@ -111,7 +109,6 @@ export async function createChat(req, res) {
             console.error("Error in API call:", error);
             return res.status(500).json({ error: "Failed to get a response from the OpenAI API" });
         }
-
         console.log(completion);
 
         if (!completion || !completion.choices || completion.choices.length === 0) {
@@ -131,12 +128,11 @@ export async function createChat(req, res) {
             room: roomid,
             keywords: keywords
         });
-
         await message.save();
         room.messages.push(message._id);
         await room.save();
-
         return res.status(200).json({ success: true, data: message });
+        
     } catch (error) {
         console.error("Error in createChat:", error);
         return res.status(500).json({ error: error.message });

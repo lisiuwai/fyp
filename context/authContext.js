@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }) => {
           console.log(data);
           if (data.token && data.email) { 
             localStorage.setItem('token', data.token);
-            setUserEmail(data.email); 
             setIsAuthenticated(true);
+            localStorage.setItem('userEmail', data.email);
             resolve(data);
           }
         })
@@ -71,13 +71,14 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userEmail');
     setIsAuthenticated(false);
     router.push('/loginpage');
   }, [router]);
 
   return (
     <AuthContext.Provider value={{
-      isAuthenticated, isLoading, login, logout, checkAuthStatus,userEmail 
+      isAuthenticated, isLoading, login, logout, checkAuthStatus,userEmail, setUserEmail 
     }}>
       {children}
     </AuthContext.Provider>

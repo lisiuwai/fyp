@@ -15,19 +15,40 @@ export default function EditProfile() {
   const [identify, setIdentify] = useState('');
   const { id } = router.query;
 
+
+  useEffect(() => {
+    if (isAuthenticated ) {
+      const token = localStorage.getItem('token');
+      fetch('/api/user/information', {
+        headers: {
+          'Authorization': `Bearer ${token}` 
+        }
+      })
+        .then((response) => {
+          if (response.ok) return response.json();
+          throw new Error('Network response was not ok');
+        })
+        .then((data) => {
+          if (data.identify !== 'teacher') {
+            alert('Access denied: You are not a teacher');
+            setAlertShown(true);
+            router.push('/'); 
+          } 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  }, [isAuthenticated]);
+
   useEffect(() => {
     if (id) {
       fetch(`/api/user/${id}`)
         .then(response => response.json())
         .then(data => {
-          if (data.identify !== 'teacher') {
-            alert('Access denied: You are not a teacher');
-            router.push('/'); 
-          }else{
             setEmail(data.email);
             setName(data.name);
             setIdentify(data.identify);
-          }       
         })
         .catch(error => console.error('Error fetching user data:', error));
     }

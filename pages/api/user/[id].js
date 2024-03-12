@@ -19,7 +19,6 @@ export default async function handler(req, res) {
     const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
     res.status(200).json(updatedUser);
   } else if (req.method === 'DELETE') {
-    // Delete user
     await User.findByIdAndDelete(id);
     res.status(200).json({ message: 'User deleted successfully' });
   } else {

@@ -4,10 +4,11 @@ import Message from '../models/message.model';
 // GET http://localhost:3000/api/room
 export async function getAllRooms(req, res) {
     try {
-        const rooms = await Room.find({})
-        return res.status(200).json({ success: true, data: rooms })
+        const { email } = req.query; 
+        const rooms = await Room.find({ email }); 
+        return res.status(200).json({ success: true, data: rooms });
     } catch (error) {
-        return res.status(400).json({ error })
+        return res.status(400).json({ error: 'Failed to fetch rooms' });
     }
 }
 

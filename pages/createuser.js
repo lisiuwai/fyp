@@ -13,31 +13,32 @@ export default function create() {
     const [password, setPassword] = useState('');
     const [identify, setIdentify] = useState('');
     const [alertShown, setAlertShown] = useState(false);
+    const [isSelectFocused, setIsSelectFocused] = useState(false);
 
     useEffect(() => {
-        if (isAuthenticated ) {
-          const token = localStorage.getItem('token');
-          fetch('/api/user/information', {
-            headers: {
-              'Authorization': `Bearer ${token}` 
-            }
-          })
-            .then((response) => {
-              if (response.ok) return response.json();
-              throw new Error('Network response was not ok');
+        if (isAuthenticated) {
+            const token = localStorage.getItem('token');
+            fetch('/api/user/information', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
-            .then((data) => {
-              if (data.identify !== 'teacher' && !alertShown) {
-                alert('Access denied: You are not a teacher');
-                setAlertShown(true);
-                router.push('/'); 
-              } 
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
+                .then((response) => {
+                    if (response.ok) return response.json();
+                    throw new Error('Network response was not ok');
+                })
+                .then((data) => {
+                    if (data.identify !== 'teacher' && !alertShown) {
+                        alert('Access denied: You are not a teacher');
+                        setAlertShown(true);
+                        router.push('/');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
-      }, [isAuthenticated, alertShown, router]);
+    }, [isAuthenticated, alertShown, router]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -91,49 +92,80 @@ export default function create() {
                 </nav>
             </div>
 
-            <form onSubmit={handleSubmit} className="create-user-form">
-                <label htmlFor="email">User Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
+            <form onSubmit={handleSubmit} className="create-user-form max-w-lg mx-auto p-4">
+                <div className="input-field relative mb-6">
+                    <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="peer h-10 w-full border-b-2 border-gray-300 text-gray-800 placeholder-transparent focus:outline-none focus:border-green-500"
+                        placeholder="User Email" />
+                    <label htmlFor="email" className="absolute left-1 -top-3.5 text-green-500 text-md transition-all peer-focus:-top-5 peer-focus:text-green-500 peer-focus:text-md peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2"
+                    >
+                        User Email
+                    </label>
+                </div>
 
-                <label htmlFor="name">User Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
+                <div className="input-field relative mb-6">
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        className="peer h-10 w-full border-b-2 border-gray-300 text-gray-800 placeholder-transparent focus:outline-none focus:border-green-500"
+                        placeholder="User Name"
+                    />
+                    <label
+                        htmlFor="name"
+                        className="absolute left-1 -top-3.5 text-green-500 text-md transition-all peer-focus:-top-5 peer-focus:text-green-500 peer-focus:text-md peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2"
+                    >
+                        User Name
+                    </label>
+                </div>
 
-                <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                <div className="input-field relative mb-6">
+                    <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="peer h-10 w-full border-b-2 border-gray-300 text-gray-800 placeholder-transparent focus:outline-none focus:border-green-500"
+                        placeholder="Password"
+                    />
+                    <label htmlFor="password" className="absolute left-1 -top-3.5 text-green-500 text-md transition-all peer-focus:-top-5 peer-focus:text-green-500 peer-focus:text-md peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2"
+                    >
+                        Password
+                    </label>
+                </div>
 
-                <label htmlFor="identify">Role</label>
-                <select
-                    id="identify"
-                    value={identify}
-                    onChange={(e) => setIdentify(e.target.value)}
-                    required
-                >
-                    <option value="" disabled>Choose a role</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="student">Student</option>
-                </select>
+                <div className="input-field relative mb-6">
+                    <select
+                        id="identify"
+                        value={identify}
+                        onChange={(e) => setIdentify(e.target.value)}
+                        required
+                        onFocus={() => setIsSelectFocused(true)}
+                        onBlur={() => setIsSelectFocused(identify !== '')}
+                        className={`peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-500 ${identify && 'selected'}`}
+                    >
+                        <option value="" disabled>Choose a role</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                    <label
+                        htmlFor="identify"
+                        className={`absolute left-0 top-0 text-gray-500 text-sm transition-all peer-focus:top-[-22px] peer-focus:text-green-500 peer-selected:top-[-22px] peer-selected:text-green-500`}
+                    >
+                    </label>
+                </div>
 
-                <div className="form-actions">
-                    <button type="submit" className="create-btn">Create</button>
-                    <button type="button" className="cancel-btn" onClick={handleCancel}>Cancel</button>
+                <div className="form-actions flex justify-between mt-4">
+                    <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create</button>
+                    <button type="button" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleCancel}>Cancel</button>
                 </div>
             </form>
         </div>

@@ -202,10 +202,14 @@ export default function Teacher() {
           )}
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="course-form">
+      <h1 className="text-4xl font-bold text-center text-gray-900">
+        Please input your course information here
+      </h1>
+      <form onSubmit={handleSubmit} className="course-form bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div>
-          <label>Contact information of this course:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2"  htmlFor="contactInfo" >Contact information of this course:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="contactInfo"
             value={contactInfo}
@@ -214,8 +218,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Number of students in the group project:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2" >Number of students in the group project:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="studentNumber"
             value={studentNumber}
@@ -224,8 +229,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Requirements of the assignment:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2">Requirements of the assignment:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="assignment"
             value={assignment}
@@ -234,8 +240,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Requirements of the project:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2">Requirements of the project:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="project"
             value={project}
@@ -244,8 +251,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Exam format and tips:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2">Exam format and tips:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="exam"
             value={exam}
@@ -254,8 +262,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Deadline of the assignment/project:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2">Deadline of the assignment/project:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="deadline"
             value={deadline}
@@ -264,8 +273,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Marking scheme of the assignment:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2">Marking scheme of the assignment:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="msassignment"
             value={msassignment}
@@ -274,8 +284,9 @@ export default function Teacher() {
           />
         </div>
         <div>
-          <label>Marking scheme of the project:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2">Marking scheme of the project:</label>
           <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="msproject"
             value={msproject}
@@ -283,9 +294,11 @@ export default function Teacher() {
             required
           />
         </div>
-        <div className="form-actions">
-          <button type="submit" className="create-btn">Submit</button>
-        </div>
+        <div className="flex items-center justify-between mt-6">
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Submit
+        </button>
+      </div>
       </form>
     </div>
   );

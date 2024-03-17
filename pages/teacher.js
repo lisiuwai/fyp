@@ -4,6 +4,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { useRouter } from 'next/router';
 import Loading from '../components/loading'
 import { useAuth } from '../context/authContext';
+import { Pie } from 'react-chartjs-2';
 
 export default function Teacher() {
   const { isAuthenticated, isLoading } = useRequireAuth();
@@ -21,6 +22,31 @@ export default function Teacher() {
   const [msproject, setmsproject] = useState('');
   const [mostFrequentQuestions, setMostFrequentQuestion] = useState([]);
   const [topKeywords, setTopKeywords] = useState([]);
+
+  const pieChartData = {
+    labels: mostFrequentQuestions.map(q => q._id),
+    datasets: [
+      {
+        label: 'Most Frequent Questions',
+        data: mostFrequentQuestions.map(q => q.count),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -81,7 +107,7 @@ export default function Teacher() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch('/api/course/information'); 
+        const response = await fetch('/api/course/information');
         if (!response.ok) throw new Error('Failed to fetch course data');
         const data = await response.json();
         console.log(data);
@@ -98,11 +124,11 @@ export default function Teacher() {
         console.error('Error fetching course data:', error);
       }
     };
-  
+
     if (isAuthenticated) {
       fetchCourse();
     }
-  }, [isAuthenticated]); 
+  }, [isAuthenticated]);
 
   const handleEdit = () => {
     if (teacherId) {
@@ -174,13 +200,7 @@ export default function Teacher() {
           {mostFrequentQuestions.length > 0 && (
             <div>
               <h3>Top 5 Most Frequent Questions:</h3>
-              <ul>
-                {mostFrequentQuestions.map((q, index) => (
-                  <li key={index} style={{ color: index % 2 === 0 ? 'blue' : 'inherit' }}>
-                    {q._id} (Asked {q.count} times)
-                  </li>
-                ))}
-              </ul>
+              <Pie data={pieChartData} />
             </div>
           )}
         </div>
@@ -207,9 +227,9 @@ export default function Teacher() {
       </h1>
       <form onSubmit={handleSubmit} className="course-form bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div>
-          <label className="block text-gray-700 text-md font-bold mb-2"  htmlFor="contactInfo" >Contact information of this course:</label>
+          <label className="block text-gray-700 text-md font-bold mb-2" htmlFor="contactInfo" >Contact information of this course:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="contactInfo"
             value={contactInfo}
@@ -220,7 +240,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2" >Number of students in the group project:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="studentNumber"
             value={studentNumber}
@@ -231,7 +251,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2">Requirements of the assignment:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="assignment"
             value={assignment}
@@ -242,7 +262,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2">Requirements of the project:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="project"
             value={project}
@@ -253,7 +273,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2">Exam format and tips:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="exam"
             value={exam}
@@ -264,7 +284,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2">Deadline of the assignment/project:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="deadline"
             value={deadline}
@@ -275,7 +295,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2">Marking scheme of the assignment:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="msassignment"
             value={msassignment}
@@ -286,7 +306,7 @@ export default function Teacher() {
         <div>
           <label className="block text-gray-700 text-md font-bold mb-2">Marking scheme of the project:</label>
           <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             name="msproject"
             value={msproject}
@@ -295,10 +315,10 @@ export default function Teacher() {
           />
         </div>
         <div className="flex items-center justify-between mt-6">
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Submit
-        </button>
-      </div>
+          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -17,7 +17,7 @@ export async function createRoom(req, res) {
     try {
         const { email } = req.body; 
         console.log('Email received:', email);
-        const len = await Room.countDocuments({});
+        const len = await Room.countDocuments({email: email});
         const defaultRoom = {
             name: `Room ${len + 1}`,
             email, 

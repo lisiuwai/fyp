@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
           if (response.ok) {
             return response.json();
           } else {
-            response.json().then(json => reject({ status: response.status, ...json }));
+            return response.json().then(json => reject({ status: response.status, ...json }));
           }
         })
         .then(data => {
@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = useCallback(async () => {
       setIsLoading(true);
     const token = localStorage.getItem('token');
-    //console.log('Token from local storage:', token);
     if (token) {
       try {
         const response = await fetch('/api/user/token', {
@@ -59,7 +58,6 @@ export const AuthProvider = ({ children }) => {
         console.error('Error validating token:', error);
       }
       setIsLoading(false);
-     // console.log('Token is valid, setting isAuthenticated to true');
     }else{
       setIsLoading(false);
       console.log('No token found, setting isAuthenticated to false');

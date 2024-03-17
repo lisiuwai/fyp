@@ -5,16 +5,17 @@ import ENV from '../config.env';
 import nlp from 'compromise';
 import Course from '@/models/course';
 
-const courseInfoKeywords  = {
-  'group project': 'studentNumber',
-  'contact' : 'contactInfo',
-  'requirement of assignment': 'assignment',
-  'requirement of project': 'project',
-  'deadline' : 'deadline',
-  'marking scheme of assignment' : 'msassignment',
-  'exam' : 'exam',
-  'marking scheme of project' : 'msproject',
-}; 
+const courseInfoKeywords = {
+    'studentNumber': ['group project', 'team assignment', 'project participants'],
+    'contactInfo': ['contact', 'teacher info', 'instructor contact', 'find the teacher'],
+    'assignment': ['requirement of assignment'], 
+    'project': ['requirement of project'], 
+    'deadline': ['deadline', 'submit'], 
+    'msassignment': ['marking scheme of assignment'], 
+    'exam': ['exam'], 
+    'msproject': ['marking scheme of project'], 
+};
+
 
 export async function getChat(req, res) {
     try {
@@ -31,6 +32,22 @@ export async function getChat(req, res) {
     }
 }
 
+function findMatchedField(question) {
+    let matchedField = null;
+    const normalizedQuestion = question.toLowerCase();
+  
+    Object.entries(courseInfoKeywords).forEach(([field, keywords]) => {
+      keywords.forEach(keyword => {
+        if (normalizedQuestion.includes(keyword)) {
+          matchedField = field;
+        }
+      });
+    });
+  
+    return matchedField;
+  }
+  
+
 export async function createChat(req, res) {
     try {
         const { roomid } = req.query;
@@ -43,31 +60,28 @@ export async function createChat(req, res) {
         if (!room) return res.status(400).json({ error: "no room found" });
 
         const keywords = extractKeywords(question);
+        const matchedField = findMatchedField(question);
 
         function extractKeywords(text) {
             const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
-            text = text.replace(punctuationRegex, '').toLowerCase(); 
-            const stopwords = ['i', 'you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an','to','ask'];
-            const words = text.split(/\s+/).filter(word => !stopwords.includes(word)); 
+            text = text.replace(punctuationRegex, '').toLowerCase();
+            const stopwords = ['i', 'you', 'me', 'some', 'of', 'can', 'give', 'is', 'what', 'the', 'a', 'an', 'to', 'ask'];
+            const words = text.split(/\s+/).filter(word => !stopwords.includes(word));
 
-            let doc = nlp(words.join(' ')); 
+            let doc = nlp(words.join(' '));
             let keywords = doc.nouns().out('array');
-          
+
             if (keywords.length === 0) {
-                return words.slice(0, 5).join(' '); 
+                return words.slice(0, 5).join(' ');
             }
-            return keywords.join(' '); 
-          }
+            return keywords.join(' ');
+        }
 
-        const keywordMatch = Object.keys(courseInfoKeywords).find(keyword => 
-            question.toLowerCase().includes(keyword)
-        );
-
-        if (keywordMatch) {
-            const courseField = courseInfoKeywords[keywordMatch];
-            const course = await Course.findOne(); 
+        if (matchedField) {
+            const courseField = matchedField;
+            const course = await Course.findOne();
             if (!course || !course[courseField]) {
-                console.log("Course information not found for keyword: ", keywordMatch);
+                console.log("Course information not found for field: ", matchedField);
                 return res.status(404).json({ error: "Course information not found" });
             }
 
@@ -86,11 +100,11 @@ export async function createChat(req, res) {
             await room.save();
             return res.status(200).json({ success: true, data: message });
         }
-        
+
         const openai = new OpenAI({
             apiKey: ENV.OPENAI_API_KEY,
         });
-    
+
         let completion;
         try {
             completion = await openai.chat.completions.create({
@@ -119,9 +133,9 @@ export async function createChat(req, res) {
         if (!messageChoice.message || !messageChoice.message.content) {
             return res.status(500).json({ error: "Invalid message structure in the response" });
         }
-        
+
         const messageText = messageChoice.message.content;
-        
+
         const message = new Message({
             question: question,
             answer: messageText,
@@ -132,7 +146,7 @@ export async function createChat(req, res) {
         room.messages.push(message._id);
         await room.save();
         return res.status(200).json({ success: true, data: message });
-        
+
     } catch (error) {
         console.error("Error in createChat:", error);
         return res.status(500).json({ error: error.message });

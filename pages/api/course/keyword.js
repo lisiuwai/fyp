@@ -16,7 +16,6 @@ function extractKeywords(text) {
   return keywords.join(' '); 
 }
 
-
 export default async function handler(req, res) {
    
     if (req.method === 'POST') {
@@ -32,32 +31,26 @@ export default async function handler(req, res) {
             res.status(400).json({ success: false, error: error.toString() });
         }
     } else if (req.method === 'GET') {
-      const punctuationRegex = /[.,\/#!$%\^&?\*;:{}=\-_`~()]/g;
-
       try {
-        const keywords = await Message.aggregate([
-          { $unwind: "$keywords" },
-          { $group: { _id: "$keywords", count: { $sum: 1 } } },
-          { $sort: { count: -1 } },
-          { $limit: 10 }
-        ]);
-  
-        const cleanedKeywords = keywords.map(keyword => ({
-          _id: keyword._id.replace(punctuationRegex, ''),
-          count: keyword.count
-        }));
-    
-        if (cleanedKeywords.length > 0) {
-          res.status(200).json({ success: true, data: cleanedKeywords });
-        } else {
-            res.status(404).json({ success: false, error: "No keywords found." });
-          }
-        } catch (error) {
-          res.status(500).json({ success: false, error: error.toString() });
-        }
-      } else {
-        res.setHeader('Allow', ['GET', 'POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+        const messages = await Message.find({}, 'keywords');
+        const allKeywords = messages.map(msg => msg.keywords).join(' '); 
+        const words = allKeywords.toLowerCase().split(/\s+/).filter(Boolean);
+        
+        const wordCounts = words.reduce((acc, word) => {
+          acc[word] = (acc[word] || 0) + 1;
+          return acc;
+        }, {});
+        
+        const sortedWordCounts = Object.entries(wordCounts)
+          .map(([word, count]) => ({ word, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5);
+        res.status(200).json({ success: true, data: sortedWordCounts });
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.toString() });
       }
-    
-}
+    } else {
+      res.setHeader('Allow', ['GET', 'POST']);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+    }    
+  }    

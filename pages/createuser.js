@@ -91,7 +91,9 @@ export default function create() {
                     <button className="logout" onClick={handleLogout}>Logout</button>
                 </nav>
             </div>
-
+            <h3 className="text-center font-bold text-lg">
+                Create user
+            </h3>
             <form onSubmit={handleSubmit} className="create-user-form max-w-lg mx-auto p-4">
                 <div className="input-field relative mb-6">
                     <input

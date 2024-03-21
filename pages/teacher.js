@@ -4,7 +4,8 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { useRouter } from 'next/router';
 import Loading from '../components/loading'
 import { useAuth } from '../context/authContext';
-import { Pie } from 'react-chartjs-2';
+import { Pie, Bar } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
 export default function Teacher() {
   const { isAuthenticated, isLoading } = useRequireAuth();
@@ -46,6 +47,63 @@ export default function Teacher() {
         borderWidth: 1,
       },
     ],
+  };
+
+  const pieChartOptions = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return `Asked ${context.parsed} times`;
+          }
+        }
+      }
+    },
+  };
+
+  const barChartData = {
+    labels: topKeywords.map(kw => kw.word),
+    datasets: [
+      {
+        label: 'Keyword Frequency',
+        data: topKeywords.map(kw => kw.count),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const barChartOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Top 5 Keywords Frequency',
+      },
+      maintainAspectRatio: false, 
+      aspectRatio: 2,
+    },
   };
 
   useEffect(() => {
@@ -110,7 +168,6 @@ export default function Teacher() {
         const response = await fetch('/api/course/information');
         if (!response.ok) throw new Error('Failed to fetch course data');
         const data = await response.json();
-        console.log(data);
         setContactInfo(data.data.contactInfo);
         setstudentNumber(data.data.studentNumber);
         setassignment(data.data.assignment);
@@ -195,27 +252,27 @@ export default function Teacher() {
           <button className="logout" onClick={handleLogout}>Logout</button>
         </nav>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '50%', margin: '1em' }}>
+      <div className="flex justify-between">
+        <div className="w-1/2 p-4">
           {mostFrequentQuestions.length > 0 && (
             <div>
               <h3>Top 5 Most Frequent Questions:</h3>
-              <Pie data={pieChartData} />
+              <div style={{ width: '100%', height: '100%' }}>
+                <Pie data={pieChartData} options={pieChartOptions} />
+              </div>
             </div>
           )}
         </div>
 
-        <div style={{ width: '50%', margin: '1em' }}>
+        <div className="w-3/4 p-4 h-96">
           {topKeywords.length > 0 ? (
             <div>
-              <h3 >Top 10 Keywords:</h3>
-              <ul>
-                {topKeywords.map((keyword, index) => (
-                  <li key={index} style={{ color: index % 2 === 0 ? 'blue' : 'inherit' }}>
-                    {keyword._id} (Mentioned {keyword.count} times)
-                  </li>
-                ))}
-              </ul>
+              <div>
+                <h3>Top 5 Keywords Frequency:</h3>
+                <div style={{ width: '100%', height: '100%' }}>
+                  <Bar data={barChartData} options={barChartOptions} />
+                </div>
+              </div>
             </div>
           ) : (
             <p>No keywords record found.</p>

@@ -100,6 +100,10 @@
   border-radius: 4px; 
 }
 
+.canvas-container canvas {
+  height: 384px !important; 
+}
+
 .input-field label {
   transition: all 0.2s ease-in-out;
 }

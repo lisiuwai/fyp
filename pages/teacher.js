@@ -24,11 +24,11 @@ export default function Teacher() {
   const [mostFrequentQuestions, setMostFrequentQuestion] = useState([]);
   const [topKeywords, setTopKeywords] = useState([]);
 
-  const pieChartData = {
+  const horizontalBarChartData = {
     labels: mostFrequentQuestions.map(q => q._id),
     datasets: [
       {
-        label: 'Most Frequent Questions',
+        label: 'Number of Times Asked',
         data: mostFrequentQuestions.map(q => q.count),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -49,17 +49,49 @@ export default function Teacher() {
     ],
   };
 
-  const pieChartOptions = {
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            return `Asked ${context.parsed} times`;
-          }
-        }
-      }
+  const horizontalBarChartOptions = {
+    indexAxis: 'y', 
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: {
+          font: {
+            size: 18, 
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 18, 
+          },
+        },
+      },
     },
+    plugins: {
+      legend: {
+        display: false, 
+      },
+      tooltip: { 
+        enabled: true,
+        mode: 'point',
+        intersect: false,
+        bodyFont: {
+          size: 18, 
+        },
+        titleFont: {
+          size: 18, 
+        },
+        footerFont: {
+          size: 18, 
+        },
+        padding: 10, 
+      },
+    },
+    maintainAspectRatio: false, 
+    // aspectRatio: 2, 
   };
+  
 
   const barChartData = {
     labels: topKeywords.map(kw => kw.word),
@@ -90,21 +122,45 @@ export default function Teacher() {
     scales: {
       y: {
         beginAtZero: true,
+        ticks: {
+          font: {
+            size: 18, 
+          },
+        },
+      },
+      x: {
+        ticks: {
+          font: {
+            size: 18, 
+          },
+        },
       },
     },
     plugins: {
       legend: {
-        display: true,
+        display: false,
         position: 'top',
       },
-      title: {
-        display: true,
-        text: 'Top 5 Keywords Frequency',
+      tooltip: { 
+        enabled: true,
+        mode: 'index',
+        intersect: false,
+        bodyFont: {
+          size: 18, 
+        },
+        titleFont: {
+          size: 18, 
+        },
+        footerFont: {
+          size: 18, 
+        },
+        padding: 9,
       },
-      maintainAspectRatio: false, 
-      aspectRatio: 2,
+      maintainAspectRatio: false,
+     
     },
-  };
+  }
+  
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -253,18 +309,18 @@ export default function Teacher() {
         </nav>
       </div>
       <div className="flex justify-between">
-        <div className="w-1/2 p-4">
+        <div className="canvas-container w-3/4 p-4 h-90">
           {mostFrequentQuestions.length > 0 && (
             <div>
               <h3>Top 5 Most Frequent Questions:</h3>
               <div style={{ width: '100%', height: '100%' }}>
-                <Pie data={pieChartData} options={pieChartOptions} />
+              <Bar data={horizontalBarChartData} options={horizontalBarChartOptions} />
               </div>
             </div>
           )}
         </div>
 
-        <div className="w-3/4 p-4 h-96">
+        <div className="w-3/4 p-4 h-90">
           {topKeywords.length > 0 ? (
             <div>
               <div>

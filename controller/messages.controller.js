@@ -103,6 +103,7 @@ export async function createChat(req, res) {
 
         const openai = new OpenAI({
             apiKey: ENV.OPENAI_API_KEY,
+            baseURL: "https://api.xty.app/v1",
         });
 
         let completion;
@@ -110,10 +111,10 @@ export async function createChat(req, res) {
             completion = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo-0125",
                 messages: [
-                    /*    {
+                        {
                            "role": "system",
                            "content": "You are a knowledgeable assistant in computer science. If a question is outside this domain, it will redirect the user to computer science topics with a polite message.'"
-                       }, */
+                       }, 
                     { "role": "user", "content": question }
                 ],
                 temperature: 0.7,

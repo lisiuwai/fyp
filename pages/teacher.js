@@ -289,7 +289,7 @@ export default function Teacher() {
       });
 
       if (response.ok) {
-        alert('Course updated successfully');
+        alert('Course information updated successfully');
       } else {
         console.error('Failed to update course');
       }

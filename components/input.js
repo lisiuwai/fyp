@@ -62,8 +62,8 @@ export default function Input({ roomid, inputText, setInputText, toggleTheme, da
         <div className="absolute right-20 bottom-20 w-96 p-4 bg-sky-300 dark:bg-gray-800 shadow-lg rounded-lg">
             <h3 className="text-lg font-semibold">Chatbot Usage Guide</h3>
             <ul className="list-disc pl-5 space-y-1">
-                <li>Exclusively for Computer Science course inquiries.</li>
-                <li>Quickly retrieve course-related information and support.</li>
+                <li>Exclusively for Computer Science course inquiries</li>
+                <li>Retrieve course-related information or answers to general queries swiftly</li>
                 <li>Examples of questions you can ask:</li>
                 <ul className="list-disc pl-8 space-y-1">
                     <li>Teacher contact information</li>

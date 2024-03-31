@@ -23,6 +23,7 @@ export default function Teacher() {
   const [msproject, setmsproject] = useState('');
   const [mostFrequentQuestions, setMostFrequentQuestion] = useState([]);
   const [topKeywords, setTopKeywords] = useState([]);
+  const [isLoadingKeywords, setIsLoadingKeywords] = useState(true);
 
   const horizontalBarChartData = {
     labels: mostFrequentQuestions.map(q => q._id),
@@ -154,10 +155,9 @@ export default function Teacher() {
         footerFont: {
           size: 18, 
         },
-        padding: 9,
+        padding: 10,
       },
       maintainAspectRatio: false,
-     
     },
   }
   
@@ -205,6 +205,7 @@ export default function Teacher() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      setIsLoadingKeywords(true);
       fetch('/api/course/keyword')
         .then(response => response.json())
         .then(data => {
@@ -213,6 +214,7 @@ export default function Teacher() {
           } else {
             setTopKeywords([]);
           }
+          setIsLoadingKeywords(false); 
         })
         .catch(error => console.error("Failed to fetch top keywords", error));
     }
@@ -258,7 +260,7 @@ export default function Teacher() {
     logout();
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingKeywords) {
     return <Loading />;
   }
 
@@ -320,7 +322,7 @@ export default function Teacher() {
           )}
         </div>
 
-        <div className="w-3/4 p-4 h-90">
+        <div className="canvas-container w-3/4 p-4 h-90">
           {topKeywords.length > 0 ? (
             <div>
               <div>

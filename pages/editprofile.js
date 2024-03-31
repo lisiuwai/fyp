@@ -73,7 +73,7 @@ export default function EditProfile() {
       });
 
       if (response.ok) {
-        window.alert('User profile is successfully updated');
+        window.alert('User profile is successfully saved');
         setTimeout(() => {
           router.back();
         },);
@@ -163,7 +163,7 @@ export default function EditProfile() {
         </select>
 
         <div className="form-actions">
-          <button type="submit" className="create-btn">update</button>
+          <button type="submit" className="create-btn">Save</button>
           <button type="button" className="cancel-btn" onClick={handleCancel}>Cancel</button>
         </div>
       </form>

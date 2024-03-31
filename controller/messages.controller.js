@@ -113,12 +113,12 @@ export async function createChat(req, res) {
                 messages: [
                         {
                            "role": "system",
-                           "content": "You are a knowledgeable assistant in computer science. If a question is outside this domain, it will redirect the user to computer science topics with a polite message.'"
+                           "content": "You are a knowledgeable assistant in computer science. Your role is to guide users to use the system ethically and support their learning. If a question is outside the computer science domain, you will redirect the user to relevant computer science topics with a polite message. Encourage users to think critically and learn from the interaction rather than providing direct solutions to assignments or tests.'"
                        }, 
                     { "role": "user", "content": question }
                 ],
-                temperature: 0.7,
-                max_tokens: 100,
+                temperature: 0.5,
+                max_tokens: 500,
             });
         } catch (error) {
             console.error("Error in API call:", error);

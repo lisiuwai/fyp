@@ -11,8 +11,6 @@ export default function Aside({ getRooms, handler, isSidebarVisible, toggleSideb
     const { logout } = useAuth();
     const [userName, setUserName] = useState('');
     const { userEmail, setUserEmail  } = useAuth();
-
-
     const [editedName, setEditedName] = useState('');
 
     useEffect(() => {

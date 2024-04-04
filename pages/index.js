@@ -18,7 +18,7 @@ export default function Home() {
   
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth < 1080) {
+      if (window.innerWidth < 1280) {
         setIsSidebarVisible(false);
       } else {
         setIsSidebarVisible(true);

@@ -13,6 +13,10 @@ export default async function handler(req, res) {
     const { email, name, password, identify } = req.body;
 
     try {
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+          return res.status(409).json({ success: false });
+        }
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = new User({
         email,

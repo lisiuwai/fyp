@@ -56,13 +56,17 @@ export default function create() {
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to create user');
-            }
-
-            const result = await response.json();
-            if (result.success) {
-                router.push('/manageuser');
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    router.push('/manageuser');
+                }
+            } else if (response.status === 409) {
+                window.alert('Email already exists. Please use a different email.');
+            } else {
+                const errorResult = await response.text();
+                console.error('Failed to create user:', errorResult);
+                window.alert('Failed to create user. Please try again later.');
             }
         } catch (error) {
             console.error('An error occurred:', error);
